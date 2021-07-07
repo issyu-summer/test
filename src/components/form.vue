@@ -3,19 +3,19 @@
     <div v-for="(item, index) in formList" :key="index" class="form-list">
       <div class="button-box">
         <template v-if="index === formList.length -1">
-          <el-button @click="onAddFormItem" type="primary" size="medium" icon="el-icon-plus"></el-button>
+          <el-button icon="el-icon-plus" size="medium" type="primary" @click="onAddFormItem" />
         </template>
       </div>
       <el-form class="form-box" label-width="auto">
         <el-row :gutter="24">
           <el-col :span="12">
             <el-form-item label="数据表">
-              <el-select placeholder="请选择数据表"></el-select>
+              <el-select placeholder="请选择数据表" value />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="字段名">
-              <el-select placeholder="请选择字段名"></el-select>
+              <el-select placeholder="请选择字段名" value />
             </el-form-item>
           </el-col>
         </el-row>
@@ -45,31 +45,34 @@ export default {
   data() {
     return {
       formList: [[]]
-    };
+    }
   },
   methods: {
     onAddFormItem() {
-      this.formList.push([]);
+      this.formList.push([])
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>
-  .form-wrapper {
+.form-wrapper {
+  width: 100%;
+
+  .form-list {
     width: 100%;
-    .form-list {
-      width: 100%;
-      padding: 30px 30px 0 30px;
-      box-sizing: border-box;
-      display: flex;
-      .button-box {
-        width: 88px;
-      }
-      .form-box {
-        background: #fff;
-        padding: 20px;
-      }
+    padding: 30px 30px 0 30px;
+    box-sizing: border-box;
+    display: flex;
+
+    .button-box {
+      width: 88px;
+    }
+
+    .form-box {
+      background: #fff;
+      padding: 20px;
     }
   }
+}
 </style>

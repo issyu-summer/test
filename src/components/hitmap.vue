@@ -1,20 +1,24 @@
 <template>
   <div class="map-wrapper">
-      <el-form-item label="选择图片" prop="map" required>
-        <el-upload
-          ref="map"
-          :file-list="mapfileList"
-          :action="mapAction"
-          :auto-upload="false"
-          :before-upload="mapBeforeUpload"
-          list-type="picture"
-          accept="image/*"
-          limit="5"
-        >
-          <el-button size="small" type="primary" icon="el-icon-upload"
-            >点击上传</el-button>
-        </el-upload>
-      </el-form-item>
+    <el-form-item label="选择图片" prop="map" required>
+      <el-upload
+        ref="map"
+        :action="mapAction"
+        :auto-upload="false"
+        :before-upload="mapBeforeUpload"
+        :file-list="mapfileList"
+        accept="image/*"
+        limit="5"
+        list-type="picture"
+      >
+        <el-button
+          icon="el-icon-upload"
+          size="small"
+          type="primary"
+        >点击上传
+        </el-button>
+      </el-upload>
+    </el-form-item>
   </div>
 </template>
 
@@ -25,20 +29,20 @@ export default {
   data() {
     return {
       formData: {
-        map: null,
+        map: null
       },
- 
-      mapAction: 'https://jsonplaceholder.typicode.com/posts/',
-      mapfileList: [],
 
-    };
+      mapAction: 'https://jsonplaceholder.typicode.com/posts/',
+      mapfileList: []
+
+    }
   },
 
-computed:{},
-watch:{},
-mounted:{},
-methods:{},
-};
+  computed: {},
+  watch: {},
+  mounted: {},
+  methods: {}
+}
 </script>
 
 <style scoped>
@@ -46,18 +50,23 @@ methods:{},
   width: 200px;
   min-height: 400px;
 }
+
 .el-container {
   height: 100%;
 }
+
 .el-aside {
   background-color: #545c64;
 }
+
 .el-header {
   background-color: rgb(68, 149, 255);
 }
+
 .el-main {
   background-color: #f20;
 }
+
 .toggle {
   font-size: 36px;
   color: #989898;

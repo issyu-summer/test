@@ -1,128 +1,149 @@
 <template>
-  <div class="basic-wrapper">
-    <table>
-      <tr>
-        <td>新闻</td>
-        <td>--</td>
-        <td>--</td>
-      </tr>
-      <tr>
-        <td>title</td>
-        <td>--</td>
-        <td>--</td>
-      </tr>
-      <tr>
-        <td>detail</td>
-        <td>--</td>
-        <td>--</td>
-      </tr>
-    </table>
-    <div class="abc">
-      <el-form-item label="项目" prop="projectId">
+  <div class="in">
+    <el-row>
+      <el-col :span="8">
+        <label style="font-size: 15px">项目:</label>
+      </el-col>
+      <el-col :span="7">
         <el-select
           v-model="formData.projectId"
-          placeholder="请选择项目"
+          :style="{ width: '100%'}"
           clearable
-          :style="{ width: '100%' }"
+          placeholder="请选择项目"
         >
           <el-option
             v-for="(item, index) in projectIdOptions"
             :key="index"
+            :disabled="item.disabled"
             :label="item.label"
             :value="item.value"
-            :disabled="item.disabled"
-          ></el-option>
+            :style="{ width: '100%'}"
+          />
         </el-select>
-      </el-form-item>
-      <el-form-item label="项目名称" prop="name">
-        <el-input 
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="8">
+        <label>项目名称:</label>
+      </el-col>
+      <el-col :span="7">
+        <el-input
           v-model="formData.name"
+          :maxlength="255"
+          :style="{ width: '100%' }"
+          clearable
           placeholder="请输入项目名称"
-          :maxlength="255"
-          show-word-limit
-          clearable
           prefix-icon="el-icon-mobile"
-          :style="{ width: '100%' }"
-
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="项目英文名称" prop="enname">
-        <el-input 
+        />
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="8">
+        <label>项目英文名称:</label>
+      </el-col>
+      <el-col :span="7">
+        <el-input
           v-model="formData.enname"
-          placeholder="请输入项目英文名称"
-          :maxlength="255"
-          show-word-limit
-          clearable
-          prefix-icon="el-icon-mobile"
           :style="{ width: '100%' }"
-
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="版权信息" prop="copyright">
+          clearable
+          placeholder="请输入项目英文名称"
+          prefix-icon="el-icon-mobile"
+          show-word-limit
+        />
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="8">
+        <label>版权:</label>
+      </el-col>
+      <el-col :span="7">
         <el-input
           v-model="formData.copyright"
-          placeholder="请输入版权信息"
+          :style="{ width: '100%' }"
           clearable
-        >
-        </el-input>
-      </el-form-item>
-      <el-form-item label="record" prop="record">
+          placeholder="请输入版权信息"
+        />
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="8">
+        <label>record:</label>
+      </el-col>
+      <el-col :span="7">
         <el-input
           v-model="formData.record"
-          placeholder="请输入record"
-          clearable
           :style="{ width: '100%' }"
-        >
-        </el-input>
-      </el-form-item>
-      <el-form-item label="domainRecord" prop="domainRecord">
+          clearable
+          placeholder="请输入record"
+        />
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="8">
+        <label>domainRecord:</label>
+      </el-col>
+      <el-col :span="7">
         <el-input
           v-model="formData.domainRecord"
-          placeholder="请输入domainRecord"
-          clearable
           :style="{ width: '100%' }"
-        ></el-input>
-      </el-form-item>
-      <el-form-item label="logo" prop="logo" required>
+          clearable
+          placeholder="请输入domainRecord"
+        />
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="8">
+        <label>logo:</label>
+      </el-col>
+      <el-col :span="7">
         <el-upload
           ref="logo"
-          :file-list="logofileList"
           :action="logoAction"
           :auto-upload="false"
           :before-upload="logoBeforeUpload"
-          list-type="picture"
+          :file-list="logofileList"
           accept="image/*"
           limit="1"
+          list-type="picture"
         >
-          <el-button size="small" type="primary" icon="el-icon-upload"
-            >点击上传</el-button
-          >
+          <el-button
+            icon="el-icon-upload"
+            size="middle"
+            type="text"
+          >上传图片
+          </el-button>
         </el-upload>
-      </el-form-item>
-      <el-form-item label="banner" prop="banner" required>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="8">
+        <label>banner:</label>
+      </el-col>
+      <el-col :span="7">
         <el-upload
           ref="banner"
-          :file-list="bannerfileList"
           :action="bannerAction"
           :auto-upload="false"
           :before-upload="bannerBeforeUpload"
-          list-type="picture"
+          :file-list="bannerfileList"
           accept="image/*"
           limit="1"
+          list-type="picture"
         >
-          <el-button size="small" type="primary" icon="el-icon-upload"
-            >点击上传</el-button
-          >
+          <el-button
+            icon="el-icon-upload"
+            size="middle"
+            type="text"
+          >上传图片
+          </el-button>
         </el-upload>
-      </el-form-item>
-      <!-- <div class="in">
-
-      </div> -->
-    </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
+
 export default {
   components: {},
   props: [],
@@ -137,44 +158,44 @@ export default {
         record: undefined,
         domainRecord: undefined,
         logo: null,
-        banner: null,
+        banner: null
       },
       rules: {
         projectId: [
           {
             required: true,
             message: '请选择项目',
-            trigger: 'change',
-          },
+            trigger: 'change'
+          }
         ],
         name: [
           {
             required: true,
             message: '请输入项目名称',
-            trigger: 'blur',
-          },
+            trigger: 'blur'
+          }
         ],
         copyright: [
           {
             required: true,
             message: '请输入copyright',
-            trigger: 'blur',
-          },
+            trigger: 'blur'
+          }
         ],
         record: [
           {
             required: true,
             message: '请输入record',
-            trigger: 'blur',
-          },
+            trigger: 'blur'
+          }
         ],
         domainRecord: [
           {
             required: true,
             message: '请输入domainRecord',
-            trigger: 'blur',
-          },
-        ],
+            trigger: 'blur'
+          }
+        ]
       },
       logoAction: 'https://jsonplaceholder.typicode.com/posts/',
       logofileList: [],
@@ -183,63 +204,30 @@ export default {
       projectIdOptions: [
         {
           label: '选项一',
-          value: 1,
+          value: 1
         },
         {
           label: '选项二',
-          value: 2,
-        },
-      ],
+          value: 2
+        }
+      ]
 
-    };
-  },
-};
+    }
+  }
+}
 </script>
 
 <style scoped>
-.el-menu-admin:not(.el-menu--collapse) {
-  width: 200px;
-  min-height: 400px;
-}
-.el-container {
-  height: 100%;
-}
-.el-aside {
-  background-color: #545c64;
-}
-.el-header {
-  background-color: rgb(68, 149, 255);
-}
-.el-main {
-  background-color: #f20;
-}
-.toggle {
-  font-size: 36px;
-  color: #989898;
-  cursor: pointer;
-  line-height: 30px;
-}
 
-.basic-wrapper {
-  width: 600px;
-  display: flex;
-}
-.abc /deep/ .el-input__inner {
-	width: 220px;
-	border-top: 0px;
-	border-left: 0px;
-	border-right-width: 0px;
-	border-bottom-width: 1px;
-	/*outline: medium;*/
-}
+@import "../assets/css/align-center.css";
 
-table {
-  border-collapse: collapse;
-  margin-right: 60px;
-}
-
-table td {
-  min-width: 50px;
-  border: 1px solid #ccc;
+.in /deep/ .el-input__inner {
+  border-radius: 15px;
+  width: 220px;
+  border-top-width: 0;
+  border-left-width: 0;
+  border-right-width: 0;
+  border-bottom-width: 1px;
+  /*outline: medium;*/
 }
 </style>

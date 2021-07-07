@@ -1,0 +1,11 @@
+.el-row {
+  margin-bottom: 20px;
+}
+.el-col{
+  display: block;
+}
+label{
+  display: inline-block;
+  width: 120px;
+  text-align: right;
+}

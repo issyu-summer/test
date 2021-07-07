@@ -1,7 +1,7 @@
 <template>
   <div class="form-wrapper">
     <div v-for="(item, index) in formData" :key="index" class="form-list">
-      <div class="chart">
+      <div class="in">
         <el-row>
           <el-col :span="4">
             <div class="button-box">
@@ -24,9 +24,23 @@
             <label>数据表:</label>
           </el-col>
           <el-col :span="3">
-            <el-select v-model="formData.selectTable" :style="{width: '100%'}" clearable placeholder="数据表">
+            <el-select v-model="item.reourceId" :style="{width: '100%'}" clearable placeholder="数据表">
               <el-option
-                v-for="(item, index) in selectTableOptions"
+                v-for="(item, index) in reourceIdOptions"
+                :key="index"
+                :disabled="item.disabled"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-col>
+          <el-col :span="3">
+            <label>排序字段:</label>
+          </el-col>
+          <el-col :span="3">
+            <el-select v-model="item.column" :style="{width: '100%'}" clearable placeholder="字段名">
+              <el-option
+                v-for="(item, index) in columnOptions"
                 :key="index"
                 :disabled="item.disabled"
                 :label="item.label"
@@ -35,55 +49,33 @@
             </el-select>
           </el-col>
           <el-col :span="2">
-            <label>横轴:</label>
+            <label>升/降序</label>
           </el-col>
-          <el-col :span="3">
-            <el-select v-model="formData.Xaxis" :style="{width: '100%'}" clearable placeholder="横轴">
-              <el-option
-                v-for="(item, index) in XaxisOptions"
+          <el-col :span="4">
+            <el-radio-group v-model="item.order" size="medium">
+              <el-radio
+                v-for="(item, index) in orderOptions"
                 :key="index"
                 :disabled="item.disabled"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
-          </el-col>
-          <el-col :span="2">
-            <label>纵轴:</label>
-          </el-col>
-          <el-col :span="3">
-            <el-select v-model="formData.Yaxis" :style="{width: '100%'}" clearable placeholder="纵轴">
-              <el-option
-                v-for="(item, index) in YaxisOptions"
-                :key="index"
-                :disabled="item.disabled"
-                :label="item.label"
-                :value="item.value"
-              />
-            </el-select>
+                :label="item.value"
+              >{{ item.label }}
+              </el-radio>
+            </el-radio-group>
           </el-col>
         </el-row>
         <el-row>
           <sqlcon />
         </el-row>
-        <!--        <el-row v-if="index === formData.length -1" :gutter="24">-->
-        <!--          <el-col :span="24">-->
-        <!--            <el-form-item size="large">-->
-        <!--              <el-button type="primary" @click="submitForm">提交</el-button>-->
-        <!--              <el-button @click="resetForm">重置</el-button>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-        <!--        </el-row>-->
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
-import sqlcon from './sqlconponents.vue'
+import sqlcon from './sqlconponents'
 
 export default {
+
   components: {
     sqlcon
   },
@@ -92,51 +84,51 @@ export default {
     return {
       formData: [
         {
-          selectTable: undefined,
-          Xaxis: undefined,
-          Yaxis: undefined,
+          reourceId: undefined,
+          column: undefined,
+          order: undefined,
           sqlsen: undefined
         }
       ],
       rules: {
-        selectTable: [{
+        reourceId: [{
           required: true,
           message: '请选择数据表',
           trigger: 'change'
         }],
-        Xaxis: [{
+        column: [{
           required: true,
-          message: '请选择作为横轴的字段',
+          message: '请选择字段名',
           trigger: 'change'
         }],
-        Yaxis: [{
+        order: [{
           required: true,
-          message: '请选择作为纵轴的元素',
+          message: '升/降序不能为空',
           trigger: 'change'
-        }]
+        }],
+        sqlsen: []
       },
-      selectTableOptions: [{
+      reourceIdOptions: [{
         'label': '选项一',
         'value': 1
       }, {
         'label': '选项二',
         'value': 2
       }],
-      XaxisOptions: [{
+      columnOptions: [{
         'label': '选项一',
         'value': 1
       }, {
         'label': '选项二',
         'value': 2
       }],
-      YaxisOptions: [{
-        'label': '选项一',
+      orderOptions: [{
+        'label': '升序',
         'value': 1
       }, {
-        'label': '选项二',
+        'label': '降序',
         'value': 2
-      }],
-      sqlsen: []
+      }]
     }
   },
   computed: {},
@@ -148,7 +140,7 @@ export default {
   methods: {
     submitForm() {
       this.$refs['elForm'].validate(valid => {
-        // if (!valid) return
+        // if (!valid) return;
         // TODO 提交表单
       })
     },
@@ -168,12 +160,29 @@ export default {
     }
   }
 }
+
 </script>
 
-<style>
+<style scoped>
+
+.in /deep/ .el-input__inner {
+  border-radius: 15px;
+  width: 100px;
+  border-top-width: 0;
+  border-left-width: 0;
+  border-right-width: 0;
+  border-bottom-width: 1px;
+  /*outline: medium;*/
+}
+
+.el-row {
+  width: 900px;
+  height: 30px;
+}
+
 .form-wrapper {
   /* width: 100%; */
-  width: 900px;
+  width: 600px;
 }
 
 .form-list {
@@ -184,32 +193,16 @@ export default {
 }
 
 .button-box {
-  width: 140px;
-  text-align: right;
-  padding-top: 10px;
-  flex-shrink: 0;
-}
-
-.form-box {
-  padding: 10px;
-}
-
-.el-row {
-  width: 900px;
-  height: 30px;
-}
-
-.chart /deep/ .el-input__inner {
-  border-radius: 15px;
   width: 100px;
-  border-top-width: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  border-bottom-width: 1px;
-  /*outline: medium;*/
+  padding-top: 5px;
+  flex-shrink: 0;
 }
 
 .plus, .del {
   padding: 10px 10px;
+}
+
+.form-box {
+  padding: 10px;
 }
 </style>
