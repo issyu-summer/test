@@ -1,11 +1,11 @@
 <template>
   <div class="form-wrapper">
-    <div v-for="(item, index) in formData" :key="index" class="form-list">
+    <div v-for="(item, index) in leadBoardList" :key="index" class="form-list">
       <div class="in">
         <el-row>
           <el-col :span="4">
             <div class="button-box">
-              <template v-if="index === formData.length -1">
+              <template v-if="index === leadBoardList.length -1">
                 <el-button circle class="plus" icon="el-icon-plus" size="medium" type="primary" @click="onAddFormItem" />
               </template>
               <template v-if="index">
@@ -24,13 +24,13 @@
             <label>数据表:</label>
           </el-col>
           <el-col :span="3">
-            <el-select v-model="item.reourceId" :style="{width: '100%'}" clearable placeholder="数据表">
+            <el-select v-model="item.resourceId" :style="{width: '100%'}" clearable placeholder="数据表" @change="changeResourceId($event, index)">
               <el-option
-                v-for="(item, index) in reourceIdOptions"
+                v-for="(item, index) in resourceIdOptions"
                 :key="index"
                 :disabled="item.disabled"
-                :label="item.label"
-                :value="item.value"
+                :label="item.name"
+                :value="item.id"
               />
             </el-select>
           </el-col>
@@ -38,33 +38,33 @@
             <label>排序字段:</label>
           </el-col>
           <el-col :span="3">
-            <el-select v-model="item.column" :style="{width: '100%'}" clearable placeholder="字段名">
+            <el-select v-model="item.orderColumn" :style="{width: '100%'}" clearable placeholder="字段名">
               <el-option
-                v-for="(item, index) in columnOptions"
+                v-for="(item, index) in columnOptions[index]"
                 :key="index"
                 :disabled="item.disabled"
-                :label="item.label"
-                :value="item.value"
+                :label="item.COLUMN_NAME"
+                :value="item.COLUMN_NAME"
               />
             </el-select>
           </el-col>
           <el-col :span="2">
-            <label>升/降序</label>
+            <label>升/降序:</label>
           </el-col>
           <el-col :span="4">
-            <el-radio-group v-model="item.order" size="medium">
+            <el-radio-group v-model="item.orderType" size="medium">
               <el-radio
                 v-for="(item, index) in orderOptions"
                 :key="index"
                 :disabled="item.disabled"
                 :label="item.value"
-              >{{ item.label }}
+              >{{ item.name }}
               </el-radio>
             </el-radio-group>
           </el-col>
         </el-row>
         <el-row>
-          <sqlcon />
+          <sqlcon ref="sql" />
         </el-row>
       </div>
     </div>
@@ -73,21 +73,24 @@
 
 <script>
 import sqlcon from './sqlconponents'
-
+import { resources } from '../utils/request'
+import { columns } from '../utils/request'
 export default {
 
   components: {
     sqlcon
   },
-  props: [],
+  props: [
+    'projectId'
+  ],
   data() {
     return {
-      formData: [
+      leadBoardList: [
         {
-          reourceId: undefined,
-          column: undefined,
-          order: undefined,
-          sqlsen: undefined
+          resourceId: '',
+          orderColumn: '',
+          orderType: '',
+          sqlsen: ''
         }
       ],
       rules: {
@@ -108,55 +111,68 @@ export default {
         }],
         sqlsen: []
       },
-      reourceIdOptions: [{
-        'label': '选项一',
-        'value': 1
-      }, {
-        'label': '选项二',
-        'value': 2
+      resourceIdOptions: [{
+        'name': '选项一',
+        'id': 1
       }],
-      columnOptions: [{
-        'label': '选项一',
-        'value': 1
-      }, {
-        'label': '选项二',
-        'value': 2
-      }],
-      orderOptions: [{
-        'label': '升序',
-        'value': 1
-      }, {
-        'label': '降序',
-        'value': 2
-      }]
+      columnOptions: [[{
+        'COLUMN_NAME': 1
+      }]],
+      orderOptions: [
+        {
+          'name': '升序',
+          'value': 'asc'
+        }, {
+          'name': '降序',
+          'value': 'desc'
+        }]
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    projectId(n) {
+      if (n) {
+        this.getResources()
+      }
+    }
+  },
   created() {
+
   },
   mounted() {
+
   },
   methods: {
-    submitForm() {
-      this.$refs['elForm'].validate(valid => {
-        // if (!valid) return;
-        // TODO 提交表单
+    changeResourceId(value, index) {
+      // console.log(value, index)
+      this.leadBoardList[index].orderColumn = ''
+      if (value) {
+        this.getColumns(index)
+      } else {
+        this.columnOptions[index] = []
+      }
+    },
+    getColumns(index) {
+      columns(this.leadBoardList[index].resourceId).then(response => {
+        this.columnOptions[index] = response.data
+        this.$forceUpdate()
       })
     },
-    resetForm() {
-      this.$refs['elForm'].resetFields()
+    getResources() {
+      resources(this.projectId).then(response => {
+        this.resourceIdOptions = response.data
+      })
     },
     onAddFormItem() {
-      this.formData.push({
-        reourceId: undefined,
-        column: undefined,
-        order: undefined,
-        sqlsen: undefined
+      this.leadBoardList.push({
+        resourceId: '',
+        orderColumn: '',
+        orderType: '',
+        sqlsen: ''
       })
     },
     onDeleteFormItem(index) {
-      this.formData.splice(index, 1)
+      this.leadBoardList.splice(index, 1)
     }
   }
 }

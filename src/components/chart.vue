@@ -1,11 +1,11 @@
 <template>
   <div class="form-wrapper">
-    <div v-for="(item, index) in formData" :key="index" class="form-list">
+    <div v-for="(item, index) in chartInfo" :key="index" class="form-list">
       <div class="chart">
         <el-row>
           <el-col :span="4">
             <div class="button-box">
-              <template v-if="index === formData.length -1">
+              <template v-if="index === chartInfo.length -1">
                 <el-button circle class="plus" icon="el-icon-plus" size="medium" type="primary" @click="onAddFormItem" />
               </template>
               <template v-if="index">
@@ -24,13 +24,20 @@
             <label>数据表:</label>
           </el-col>
           <el-col :span="3">
-            <el-select v-model="formData.selectTable" :style="{width: '100%'}" clearable placeholder="数据表">
+            <el-select
+              :key="index"
+              v-model="item.resourceId"
+              :style="{width: '100%'}"
+              clearable
+              placeholder="数据表"
+              @change="changeResourceId($event, index)"
+            >
               <el-option
-                v-for="(item, index) in selectTableOptions"
+                v-for="(item, index) in resourceIdOptions"
                 :key="index"
                 :disabled="item.disabled"
-                :label="item.label"
-                :value="item.value"
+                :label="item.name"
+                :value="item.id"
               />
             </el-select>
           </el-col>
@@ -38,13 +45,13 @@
             <label>横轴:</label>
           </el-col>
           <el-col :span="3">
-            <el-select v-model="formData.Xaxis" :style="{width: '100%'}" clearable placeholder="横轴">
+            <el-select v-model="item.xAxis" :style="{width: '100%'}" clearable placeholder="横轴">
               <el-option
-                v-for="(item, index) in XaxisOptions"
+                v-for="(item, index) in xAxisOptions[index]"
                 :key="index"
                 :disabled="item.disabled"
-                :label="item.label"
-                :value="item.value"
+                :label="item.COLUMN_NAME"
+                :value="item.COLUMN_NAME"
               />
             </el-select>
           </el-col>
@@ -52,13 +59,13 @@
             <label>纵轴:</label>
           </el-col>
           <el-col :span="3">
-            <el-select v-model="formData.Yaxis" :style="{width: '100%'}" clearable placeholder="纵轴">
+            <el-select v-model="item.yAxis" :style="{width: '100%'}" clearable placeholder="纵轴">
               <el-option
-                v-for="(item, index) in YaxisOptions"
+                v-for="(item, index) in yAxisOptions[index]"
                 :key="index"
                 :disabled="item.disabled"
-                :label="item.label"
-                :value="item.value"
+                :label="item.COLUMN_NAME"
+                :value="item.COLUMN_NAME"
               />
             </el-select>
           </el-col>
@@ -76,26 +83,30 @@
         <!--        </el-row>-->
       </div>
     </div>
+
   </div>
 
 </template>
 
 <script>
 import sqlcon from './sqlconponents.vue'
+import { columns, resources } from '../utils/request'
 
 export default {
   components: {
     sqlcon
   },
-  props: [],
+  props: [
+    'projectId'
+  ],
   data() {
     return {
-      formData: [
+      chartInfo: [
         {
-          selectTable: undefined,
-          Xaxis: undefined,
-          Yaxis: undefined,
-          sqlsen: undefined
+          resourceId: '',
+          xAxis: '',
+          yAxis: '',
+          sqlsen: ''
         }
       ],
       rules: {
@@ -104,67 +115,78 @@ export default {
           message: '请选择数据表',
           trigger: 'change'
         }],
-        Xaxis: [{
+        xAxis: [{
           required: true,
           message: '请选择作为横轴的字段',
           trigger: 'change'
         }],
-        Yaxis: [{
+        yAxis: [{
           required: true,
           message: '请选择作为纵轴的元素',
           trigger: 'change'
         }]
       },
-      selectTableOptions: [{
-        'label': '选项一',
-        'value': 1
-      }, {
-        'label': '选项二',
-        'value': 2
+      resourceIdOptions: [{
+        'name': '选项一',
+        'id': 1
       }],
-      XaxisOptions: [{
-        'label': '选项一',
-        'value': 1
-      }, {
-        'label': '选项二',
-        'value': 2
-      }],
-      YaxisOptions: [{
-        'label': '选项一',
-        'value': 1
-      }, {
-        'label': '选项二',
-        'value': 2
-      }],
+      yAxisOptions: [
+        [{
+          'COLUMN_NAME': 1
+        }]
+      ],
+      xAxisOptions: [
+        [{
+          'COLUMN_NAME': 1
+        }]
+      ],
       sqlsen: []
     }
   },
   computed: {},
-  watch: {},
+  watch: {
+    projectId(n) {
+      if (n) {
+        this.getResources()
+      }
+    }
+  },
   created() {
   },
   mounted() {
   },
   methods: {
-    submitForm() {
-      this.$refs['elForm'].validate(valid => {
-        // if (!valid) return
-        // TODO 提交表单
+    changeResourceId(value, index) {
+      // console.log(value, index)
+      this.chartInfo[index].orderColumn = ''
+      if (value) {
+        this.getColumns(index)
+      } else {
+        this.chartInfo[index] = []
+      }
+    },
+    getColumns(index) {
+      columns(this.chartInfo[index].resourceId).then(response => {
+        this.xAxisOptions[index] = response.data
+        this.yAxisOptions[index] = response.data
+        this.$forceUpdate()
       })
     },
-    resetForm() {
-      this.$refs['elForm'].resetFields()
-    },
     onAddFormItem() {
-      this.formData.push({
-        reourceId: undefined,
-        column: undefined,
-        order: undefined,
-        sqlsen: undefined
+      this.chartInfo.push({
+        resourceId: '',
+        xAxis: '',
+        yAxis: '',
+        sqlsen: ''
       })
     },
     onDeleteFormItem(index) {
-      this.formData.splice(index, 1)
+      this.chartInfo.splice(index, 1)
+    },
+    getResources() {
+      resources(this.projectId).then(response => {
+        this.resourceIdOptions = response.data
+      })
     }
   }
 }
@@ -174,6 +196,11 @@ export default {
 .form-wrapper {
   /* width: 100%; */
   width: 900px;
+}
+
+.submit {
+  width: 200px;
+  background-color: lightblue;
 }
 
 .form-list {

@@ -5,11 +5,11 @@
       <el-aside width="auto">
         <div class="logo" />
         <el-menu
+          :collapse="isCollapse"
           class="el-menu-vertical-demo"
           collapse-transition="true"
-          :collapse="isCollapse"
-          @open="handleOpen"
           @close="handleClose"
+          @open="handleOpen"
         >
           <!-- <el-submenu index="1">
             <template slot="title">
@@ -17,23 +17,23 @@
               <span slot="title">添加项目</span>
             </template>
             <el-menu-item-group> -->
-          <el-menu-item @click="jumpto(0)">
+          <el-menu-item @click="jumpTo(0)">
             <i class="el-icon-location" />
             <span slot="title">基础信息配置</span>
           </el-menu-item>
-          <el-menu-item @click="jumpto(1)">
+          <el-menu-item @click="jumpTo(1)">
             <i class="el-icon-location" />
             <span slot="title">轮播图配置</span>
           </el-menu-item>
-          <el-menu-item @click="jumpto(2)">
+          <el-menu-item @click="jumpTo(2)">
             <i class="el-icon-location" />
             <span slot="title">热词配置</span>
           </el-menu-item>
-          <el-menu-item @click="jumpto(3)">
+          <el-menu-item @click="jumpTo(3)">
             <i class="el-icon-location" />
             <span slot="title">排行榜配置</span>
           </el-menu-item>
-          <el-menu-item @click="jumpto(4)">
+          <el-menu-item @click="jumpTo(4)">
             <i class="el-icon-location" />
             <span slot="title">可视化图表</span>
           </el-menu-item>
@@ -52,21 +52,26 @@
           ref="elForm"
           :model="formData"
           :rules="rules"
-          size="medium"
           label-width="100px"
+          size="medium"
         >
-          <div v-if="judge[0]">
-            <Basic />
+          <div v-show="judge[0]">
+            <Basic ref="basic" @change-project="changeProject" />
           </div>
-          <div v-if="judge[3]">
-            <LeadBoard />
+          <div v-show="judge[3]">
+            <LeadBoard ref="leaderboard" :project-id="projectId" />
           </div>
-          <div v-if="judge[1]">
-            <hitmap />
+          <div v-show="judge[1]">
+            <hitmap ref="hitmap" />
           </div>
-          <div v-if="judge[2]">这是热词</div>
-          <div v-if="judge[4]">
-            <chart />
+          <div v-show="judge[2]">这是热词</div>
+          <div v-show="judge[4]">
+            <chart ref="chart" :project-id="projectId" />
+            <div>
+              <el-button class="submit" round @click="submit">
+                提交
+              </el-button>
+            </div>
           </div>
         </el-form>
       </div>
@@ -80,6 +85,7 @@ import LeadBoard from './leadboard.vue'
 import Chart from './chart.vue'
 import Uploadpic from './uploadpic.vue'
 import Hitmap from './hitmap.vue'
+import { config } from '../utils/request'
 
 export default {
   components: {
@@ -93,8 +99,11 @@ export default {
   props: [],
   data() {
     return {
+      basicConfig: '',
+      isCollapse: false,
       elForm: '',
-      judge: [true, false, false, false, false]
+      judge: [true, false, false, false, false],
+      projectId: ''
     }
   },
   computed: {},
@@ -104,6 +113,23 @@ export default {
   mounted() {
   },
   methods: {
+    changeProject(id) {
+      this.projectId = id
+    },
+    submit() {
+      const basic = this.$refs.basic.basicConfig
+      const id = this.$refs.basic.projectId
+      const resp = config('/basic/' + id, basic)
+      console.log(resp)
+      const leadBoardList = this.$refs.leaderboard.leadBoardList
+      for (let i = 0; i < leadBoardList.length; i++) {
+        delete leadBoardList[i].sqlsen
+      }
+      const chartInfos = this.$refs.chart.chartInfo
+      for (let i = 0; i < chartInfos.length; i++) {
+        delete chartInfos[i].sqlsen
+      }
+    },
     logoBeforeUpload(file) {
       const isRightSize = file.size / 1024 / 1024 < 2
       if (!isRightSize) {
@@ -143,9 +169,8 @@ export default {
 
       this.isCollapse = !this.isCollapse
     },
-    jumpto(n) {
-      console.log(n)
-      for (var i = 0; i < 5; i++) {
+    jumpTo(n) {
+      for (let i = 0; i < 5; i++) {
         if (i === n) {
           this.judge[i] = true
           this.$set(this.judge, i, true)

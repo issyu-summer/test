@@ -6,18 +6,19 @@
       </el-col>
       <el-col :span="7">
         <el-select
-          v-model="formData.projectId"
+          v-model="projectId"
           :style="{ width: '100%'}"
           clearable
           placeholder="请选择项目"
+          @change="changeProject"
         >
           <el-option
             v-for="(item, index) in projectIdOptions"
             :key="index"
             :disabled="item.disabled"
-            :label="item.label"
-            :value="item.value"
+            :label="item.name"
             :style="{ width: '100%'}"
+            :value="item.id"
           />
         </el-select>
       </el-col>
@@ -28,7 +29,7 @@
       </el-col>
       <el-col :span="7">
         <el-input
-          v-model="formData.name"
+          v-model="basicConfig.titleCn"
           :maxlength="255"
           :style="{ width: '100%' }"
           clearable
@@ -43,7 +44,7 @@
       </el-col>
       <el-col :span="7">
         <el-input
-          v-model="formData.enname"
+          v-model="basicConfig.titleEn"
           :style="{ width: '100%' }"
           clearable
           placeholder="请输入项目英文名称"
@@ -58,7 +59,7 @@
       </el-col>
       <el-col :span="7">
         <el-input
-          v-model="formData.copyright"
+          v-model="basicConfig.copyright"
           :style="{ width: '100%' }"
           clearable
           placeholder="请输入版权信息"
@@ -71,7 +72,7 @@
       </el-col>
       <el-col :span="7">
         <el-input
-          v-model="formData.record"
+          v-model="basicConfig.record"
           :style="{ width: '100%' }"
           clearable
           placeholder="请输入record"
@@ -84,7 +85,7 @@
       </el-col>
       <el-col :span="7">
         <el-input
-          v-model="formData.domainRecord"
+          v-model="basicConfig.domainRecord"
           :style="{ width: '100%' }"
           clearable
           placeholder="请输入domainRecord"
@@ -98,15 +99,15 @@
       <el-col :span="7">
         <el-upload
           ref="logo"
-          :action="logoAction"
-          :auto-upload="false"
-          :before-upload="logoBeforeUpload"
-          :file-list="logofileList"
+          :action="action"
+          :auto-upload="true"
+          :on-success="logoSuccess"
+          :on-remove="logoRemove"
           accept="image/*"
-          limit="1"
           list-type="picture"
         >
           <el-button
+            v-if="!basicConfig.logoUrl"
             icon="el-icon-upload"
             size="middle"
             type="text"
@@ -122,15 +123,14 @@
       <el-col :span="7">
         <el-upload
           ref="banner"
-          :action="bannerAction"
-          :auto-upload="false"
-          :before-upload="bannerBeforeUpload"
-          :file-list="bannerfileList"
+          :action="action"
+          :auto-upload="true"
+          :on-success="bannerSuccess"
           accept="image/*"
-          limit="1"
           list-type="picture"
         >
           <el-button
+            v-if="!basicConfig.logoUrl"
             icon="el-icon-upload"
             size="middle"
             type="text"
@@ -139,26 +139,29 @@
         </el-upload>
       </el-col>
     </el-row>
+    <!--    <el-row>-->
+    <!--      <el-button round @click="dataTest">测试按钮</el-button>-->
+    <!--    </el-row>-->
   </div>
 </template>
 
 <script>
+import { get } from '../utils/request'
 
 export default {
   components: {},
   props: [],
   data() {
     return {
-      isCollapse: false,
-      formData: {
-        projectId: undefined,
-        name: undefined,
-        enname: undefined,
-        copyright: undefined,
-        record: undefined,
-        domainRecord: undefined,
-        logo: null,
-        banner: null
+      projectId: '',
+      basicConfig: {
+        titleCn: '',
+        titleEn: '',
+        copyright: '',
+        record: '',
+        domainRecord: '',
+        logoUrl: '',
+        bannerUrl: ''
       },
       rules: {
         projectId: [
@@ -197,21 +200,41 @@ export default {
           }
         ]
       },
-      logoAction: 'https://jsonplaceholder.typicode.com/posts/',
-      logofileList: [],
-      bannerAction: 'https://jsonplaceholder.typicode.com/posts/',
-      bannerfileList: [],
+      action: 'http://101.37.20.199:8080/image',
       projectIdOptions: [
         {
-          label: '选项一',
-          value: 1
+          name: '选项一',
+          id: 1
         },
         {
-          label: '选项二',
-          value: 2
+          name: '选项二',
+          id: 2
         }
       ]
 
+    }
+  },
+  created() {
+    get('http://localhost:4010/Project/all').then(response => {
+      this.projectIdOptions = response.data
+    })
+    console.log(this.projectId)
+  },
+  methods: {
+    changeProject(value) {
+      this.$emit('change-project', value)
+    },
+    dataTest: function() {
+      console.log(this.basicConfig)
+    },
+    logoSuccess: function(response, file, fileList) {
+      this.basicConfig.logoUrl = 'http://101.37.20.199:22000/' + response.fullPath
+    },
+    logoRemove() {
+      this.basicConfig.logoUrl = ''
+    },
+    bannerSuccess: function(response, file, fileList) {
+      this.basicConfig.bannerUrl = 'http://101.37.20.199:22000/' + response.fullPath
     }
   }
 }
