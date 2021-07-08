@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import sqlcon from './sqlconponents'
+import sqlcon from './sqlcomponents'
 import { resources } from '../utils/request'
 import { columns } from '../utils/request'
 export default {

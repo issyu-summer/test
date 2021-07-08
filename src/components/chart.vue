@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import sqlcon from './sqlconponents.vue'
+import sqlcon from './sqlcomponents.vue'
 import { columns, resources } from '../utils/request'
 
 export default {
