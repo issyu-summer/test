@@ -26,45 +26,52 @@
           <el-col :span="3">
             <el-select v-model="item.resourceId" :style="{width: '100%'}" clearable placeholder="数据表" @change="changeResourceId($event, index)">
               <el-option
-                v-for="(item, index) in resourceIdOptions"
-                :key="index"
+                v-for="(resource, resourceIndex) in resourceIdOptions"
+                :key="resourceIndex"
                 :disabled="item.disabled"
-                :label="item.name"
-                :value="item.id"
+                :label="resource.name"
+                :value="resource.id"
               />
             </el-select>
           </el-col>
-          <el-col :span="3">
+          <el-col :span="4">
             <label>排序字段:</label>
           </el-col>
-          <el-col :span="3">
+          <el-col :span="4">
             <el-select v-model="item.orderColumn" :style="{width: '100%'}" clearable placeholder="字段名">
               <el-option
-                v-for="(item, index) in columnOptions[index]"
-                :key="index"
+                v-for="(column, columnIndex) in columnOptions[index]"
+                :key="columnIndex"
                 :disabled="item.disabled"
-                :label="item.COLUMN_NAME"
-                :value="item.COLUMN_NAME"
+                :label="column.COLUMN_NAME"
+                :value="column.COLUMN_NAME"
               />
             </el-select>
           </el-col>
-          <el-col :span="2">
+          <el-col :span="3">
             <label>升/降序:</label>
           </el-col>
           <el-col :span="4">
             <el-radio-group v-model="item.orderType" size="medium">
               <el-radio
-                v-for="(item, index) in orderOptions"
-                :key="index"
+                v-for="(order, orderIndex) in orderOptions"
+                :key="orderIndex"
                 :disabled="item.disabled"
-                :label="item.value"
-              >{{ item.name }}
+                :label="order.value"
+              >{{ order.name }}
               </el-radio>
             </el-radio-group>
           </el-col>
         </el-row>
         <el-row>
-          <sqlcon ref="sql" />
+          <el-col :span="4" :offset="6">
+            <label>SQL数据源:</label>
+          </el-col>
+          <el-col :span="14">
+            <div class="sql">
+              <el-input v-model="item.sql" />
+            </div>
+          </el-col>
         </el-row>
       </div>
     </div>
@@ -72,13 +79,11 @@
 </template>
 
 <script>
-import sqlcon from './sqlcomponents'
 import { resources } from '../utils/request'
 import { columns } from '../utils/request'
 export default {
 
   components: {
-    sqlcon
   },
   props: [
     'projectId'
@@ -90,11 +95,11 @@ export default {
           resourceId: '',
           orderColumn: '',
           orderType: '',
-          sqlsen: ''
+          sql: ''
         }
       ],
       rules: {
-        reourceId: [{
+        resourceId: [{
           required: true,
           message: '请选择数据表',
           trigger: 'change'
@@ -109,7 +114,7 @@ export default {
           message: '升/降序不能为空',
           trigger: 'change'
         }],
-        sqlsen: []
+        sql: []
       },
       resourceIdOptions: [{
         'name': '选项一',
@@ -168,7 +173,7 @@ export default {
         resourceId: '',
         orderColumn: '',
         orderType: '',
-        sqlsen: ''
+        sql: ''
       })
     },
     onDeleteFormItem(index) {
@@ -192,20 +197,21 @@ export default {
 }
 
 .el-row {
-  width: 900px;
-  height: 30px;
+  margin-bottom: 15px;
+  /*width: 900px;*/
+  /*height: 30px;*/
 }
 
 .form-wrapper {
   /* width: 100%; */
-  width: 600px;
+  width: 900px;
 }
 
 .form-list {
   width: 100%;
   margin-bottom: 30px;
   box-sizing: border-box;
-  display: flex;
+  /*display: flex;*/
 }
 
 .button-box {
@@ -217,7 +223,15 @@ export default {
 .plus, .del {
   padding: 10px 10px;
 }
-
+.sql /deep/ .el-input__inner {
+  border-radius: 10px;
+  width:640px;
+  border-top-width: 0;
+  border-left-width: 0;
+  border-right-width: 0;
+  border-bottom-width: 1px;
+  /*outline: medium;*/
+}
 .form-box {
   padding: 10px;
 }

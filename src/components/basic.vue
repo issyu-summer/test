@@ -253,4 +253,5 @@ export default {
   border-bottom-width: 1px;
   /*outline: medium;*/
 }
+
 </style>

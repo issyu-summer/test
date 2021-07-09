@@ -1,11 +1,11 @@
 <template>
   <div class="form-wrapper">
-    <div v-for="(item, index) in hitmapList" :key="index" class="form-list">
+    <div v-for="(item, index) in carouselConfig" :key="index" class="form-list">
       <div class="in">
         <el-row>
           <el-col :span="4">
             <div class="button-box">
-              <template v-if="index === hitmapList.length - 1">
+              <template v-if="index === carouselConfig.length - 1">
                 <el-button
                   circle
                   class="plus"
@@ -39,11 +39,11 @@
               @change="changeResourceId($event, index)"
             >
               <el-option
-                v-for="(item, index) in resourceIdOptions"
-                :key="index"
+                v-for="(resource, resourceIndex) in resourceIdOptions"
+                :key="resourceIndex"
                 :disabled="item.disabled"
-                :label="item.name"
-                :value="item.id"
+                :label="resource.name"
+                :value="resource.id"
               />
             </el-select>
           </el-col>
@@ -56,7 +56,6 @@
               placeholder="关键词"
               clearable
               :style="{ width: '100%' }"
-              @change="changeKeyword($event, index)"
             />
           </el-col>
           <el-col :span="2">
@@ -64,11 +63,11 @@
           </el-col>
           <el-col :span="4">
             <el-upload
-              ref="item.field101"
               list-type="picture"
-              :file-list="field101fileList"
-              :action="field101Action"
-              :before-upload="field101BeforeUpload"
+              :action="carouselAction"
+              :auto-upload="true"
+              :on-success="carouselSuccess"
+              :on-remove="carouselRemove"
             >
               <el-button
                 size="small"
@@ -79,7 +78,14 @@
           </el-col>
         </el-row>
         <el-row>
-          <sqlCom />
+          <el-col :span="4" :offset="6">
+            <label>SQL数据源:</label>
+          </el-col>
+          <el-col :span="14">
+            <div class="sql">
+              <el-input v-model="item.sql" />
+            </div>
+          </el-col>
         </el-row>
       </div>
     </div>
@@ -88,40 +94,22 @@
 
 <script>
 import { resources } from '../utils/request'
-import { columns } from '../utils/request'
-import sqlCom from './sqlcomponents'
 
 export default {
-  components: { sqlCom },
+  components: { },
   props: ['projectId'],
   data() {
     return {
-      hitmapList: [
+      carouselAction: '',
+      carouselConfig: [
         {
-          resourceId: '',
+          resourceId: 123456,
+          table: '',
           keyword: '',
-          field101: ''
+          url: '',
+          sql: ''
         }
       ],
-
-      rules: {
-        resourceId: [
-          {
-            required: true,
-            message: '请选择数据表',
-            trigger: 'change'
-          }
-        ],
-        keyword: [
-          {
-            required: true,
-            message: '请输入关键字',
-            trigger: 'change'
-          }
-        ]
-      },
-      field101Action: 'http://101.37.20.199:8080/image',
-      field101fileList: [],
       resourceIdOptions: [
         {
           label: '选项一',
@@ -146,34 +134,16 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    changeResourceId(value, index) {
-      // console.log(value, index)
-      this.hitmapList[index].orderColumn = ''
-      if (value) {
-        this.getColumns(index)
-      } else {
-        this.columnOptions[index] = []
-      }
+    carouselSuccess(response, file, fileList) {
+
     },
-    getColumns(index) {
-      columns(this.hitmapList[index].resourceId).then((response) => {
-        this.columnOptions[index] = response.data
-        this.$forceUpdate()
-      })
+    carouselRemove() {
+
     },
     getResources() {
       resources(this.projectId).then((response) => {
         this.resourceIdOptions = response.data
       })
-    },
-    submitForm() {
-      this.$refs['elForm'].validate((valid) => {
-        if (!valid) return
-        // TODO 提交表单
-      })
-    },
-    resetForm() {
-      this.$refs['elForm'].resetFields()
     },
     field101BeforeUpload(file) {
       const isRightSize = file.size / 1024 / 1024 < 2
@@ -183,14 +153,17 @@ export default {
       return isRightSize
     },
     onAddFormItem() {
-      this.hitmapList.push({
-        resourceId: '',
+      this.carouselConfig.push({
+        resourceId: 123456,
+        table: '',
         keyword: '',
-        field101: ''
+        url: '',
+        fields: [],
+        conditions: ''
       })
     },
     onDeleteFormItem(index) {
-      this.hitmapList.splice(index, 1)
+      this.carouselConfig.splice(index, 1)
     }
   }
 }
@@ -198,8 +171,26 @@ export default {
 
 <style scoped>
 .el-row{
-  width:  900px;
-  height: 30px;
+  margin-bottom: 15px;
+  /*width:  900px;*/
+  /*height: 30px;*/
 }
-
+.in /deep/ .el-input__inner {
+  border-radius: 15px;
+  width: 100px;
+  border-top-width: 0;
+  border-left-width: 0;
+  border-right-width: 0;
+  border-bottom-width: 1px;
+  /*outline: medium;*/
+}
+.sql /deep/ .el-input__inner {
+  border-radius: 10px;
+  width:640px;
+  border-top-width: 0;
+  border-left-width: 0;
+  border-right-width: 0;
+  border-bottom-width: 1px;
+  /*outline: medium;*/
+}
 </style>

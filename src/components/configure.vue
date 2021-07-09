@@ -12,11 +12,11 @@
           @open="handleOpen"
         >
           <!-- <el-submenu index="1">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span slot="title">添加项目</span>
-            </template>
-            <el-menu-item-group> -->
+                  <template slot="title">
+                    <i class="el-icon-location"></i>
+                    <span slot="title">添加项目</span>
+                  </template>
+                  <el-menu-item-group> -->
           <el-menu-item @click="jumpTo(0)">
             <i class="el-icon-location" />
             <span slot="title">基础信息配置</span>
@@ -37,21 +37,23 @@
             <i class="el-icon-location" />
             <span slot="title">可视化图表</span>
           </el-menu-item>
+          <el-menu-item @click="jumpTo(5)">
+            <i class="el-icon-location" />
+            <span slot="title">导航栏配置</span>
+          </el-menu-item>
           <!-- </el-menu-item-group>
-          </el-submenu> -->
+                </el-submenu> -->
           <!-- <el-submenu index="1">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span slot="title">添加项目</span>
-            </template>
-          </el-submenu> -->
+                  <template slot="title">
+                    <i class="el-icon-location"></i>
+                    <span slot="title">添加项目</span>
+                  </template>
+                </el-submenu> -->
         </el-menu>
       </el-aside>
       <div class="register_box">
         <el-form
           ref="elForm"
-          :model="formData"
-          :rules="rules"
           label-width="100px"
           size="medium"
         >
@@ -62,11 +64,14 @@
             <LeadBoard ref="leaderboard" :project-id="projectId" />
           </div>
           <div v-show="judge[1]">
-            <hitmap ref="hitmap" />
+            <Carousel ref="carousel" :project-id="projectId" />
           </div>
           <div v-show="judge[2]">这是热词</div>
           <div v-show="judge[4]">
             <chart ref="chart" :project-id="projectId" />
+          </div>
+          <div v-show="judge[5]">
+            <Nav ref="nav" />
             <div>
               <el-button class="submit" round @click="submit">
                 提交
@@ -76,25 +81,23 @@
         </el-form>
       </div>
     </el-container>
-
   </div>
 </template>
 <script>
 import Basic from './basic.vue'
 import LeadBoard from './leadboard.vue'
 import Chart from './chart.vue'
-import Uploadpic from './uploadpic.vue'
-import Hitmap from './hitmap.vue'
+import Carousel from './carousel.vue'
 import { config } from '../utils/request'
-
+import Nav from './nav'
 export default {
   components: {
+    Nav,
     Basic,
     LeadBoard,
     Chart,
     // eslint-disable-next-line vue/no-unused-components
-    Uploadpic,
-    Hitmap
+    Carousel
   },
   props: [],
   data() {
@@ -102,7 +105,7 @@ export default {
       basicConfig: '',
       isCollapse: false,
       elForm: '',
-      judge: [true, false, false, false, false],
+      judge: [true, false, false, false, false, false],
       projectId: ''
     }
   },
@@ -170,7 +173,7 @@ export default {
       this.isCollapse = !this.isCollapse
     },
     jumpTo(n) {
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 6; i++) {
         if (i === n) {
           this.judge[i] = true
           this.$set(this.judge, i, true)
@@ -184,8 +187,7 @@ export default {
   }
 }
 </script>
-<style>
-
+<style scoped>
 .register_box {
   width: 900px;
   height: 250px;

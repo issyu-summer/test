@@ -33,11 +33,11 @@
               @change="changeResourceId($event, index)"
             >
               <el-option
-                v-for="(item, index) in resourceIdOptions"
-                :key="index"
+                v-for="(resource, resourceIndex) in resourceIdOptions"
+                :key="resourceIndex"
                 :disabled="item.disabled"
-                :label="item.name"
-                :value="item.id"
+                :label="resource.name"
+                :value="resource.id"
               />
             </el-select>
           </el-col>
@@ -47,11 +47,11 @@
           <el-col :span="3">
             <el-select v-model="item.xAxis" :style="{width: '100%'}" clearable placeholder="横轴">
               <el-option
-                v-for="(item, index) in xAxisOptions[index]"
-                :key="index"
+                v-for="(xAxis, xAxisIndex) in xAxisOptions[index]"
+                :key="xAxisIndex"
                 :disabled="item.disabled"
-                :label="item.COLUMN_NAME"
-                :value="item.COLUMN_NAME"
+                :label="xAxis.COLUMN_NAME"
+                :value="xAxis.COLUMN_NAME"
               />
             </el-select>
           </el-col>
@@ -61,26 +61,25 @@
           <el-col :span="3">
             <el-select v-model="item.yAxis" :style="{width: '100%'}" clearable placeholder="纵轴">
               <el-option
-                v-for="(item, index) in yAxisOptions[index]"
-                :key="index"
+                v-for="(yAxis, yAxisIndex) in yAxisOptions[index]"
+                :key="yAxisIndex"
                 :disabled="item.disabled"
-                :label="item.COLUMN_NAME"
-                :value="item.COLUMN_NAME"
+                :label="yAxis.COLUMN_NAME"
+                :value="yAxis.COLUMN_NAME"
               />
             </el-select>
           </el-col>
         </el-row>
         <el-row>
-          <sqlcon />
+          <el-col :span="4" :offset="6">
+            <label>SQL数据源:</label>
+          </el-col>
+          <el-col :span="14">
+            <div class="sql">
+              <el-input v-model="item.sql" />
+            </div>
+          </el-col>
         </el-row>
-        <!--        <el-row v-if="index === formData.length -1" :gutter="24">-->
-        <!--          <el-col :span="24">-->
-        <!--            <el-form-item size="large">-->
-        <!--              <el-button type="primary" @click="submitForm">提交</el-button>-->
-        <!--              <el-button @click="resetForm">重置</el-button>-->
-        <!--            </el-form-item>-->
-        <!--          </el-col>-->
-        <!--        </el-row>-->
       </div>
     </div>
 
@@ -89,12 +88,10 @@
 </template>
 
 <script>
-import sqlcon from './sqlcomponents.vue'
 import { columns, resources } from '../utils/request'
 
 export default {
   components: {
-    sqlcon
   },
   props: [
     'projectId'
@@ -106,26 +103,9 @@ export default {
           resourceId: '',
           xAxis: '',
           yAxis: '',
-          sqlsen: ''
+          sql: ''
         }
       ],
-      rules: {
-        selectTable: [{
-          required: true,
-          message: '请选择数据表',
-          trigger: 'change'
-        }],
-        xAxis: [{
-          required: true,
-          message: '请选择作为横轴的字段',
-          trigger: 'change'
-        }],
-        yAxis: [{
-          required: true,
-          message: '请选择作为纵轴的元素',
-          trigger: 'change'
-        }]
-      },
       resourceIdOptions: [{
         'name': '选项一',
         'id': 1
@@ -139,8 +119,7 @@ export default {
         [{
           'COLUMN_NAME': 1
         }]
-      ],
-      sqlsen: []
+      ]
     }
   },
   computed: {},
@@ -158,7 +137,8 @@ export default {
   methods: {
     changeResourceId(value, index) {
       // console.log(value, index)
-      this.chartInfo[index].orderColumn = ''
+      this.chartInfo[index].xAxis = ''
+      this.chartInfo[index].yAxis = ''
       if (value) {
         this.getColumns(index)
       } else {
@@ -177,7 +157,7 @@ export default {
         resourceId: '',
         xAxis: '',
         yAxis: '',
-        sqlsen: ''
+        sql: ''
       })
     },
     onDeleteFormItem(index) {
@@ -192,22 +172,17 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .form-wrapper {
   /* width: 100%; */
   width: 900px;
-}
-
-.submit {
-  width: 200px;
-  background-color: lightblue;
 }
 
 .form-list {
   width: 100%;
   margin-bottom: 30px;
   box-sizing: border-box;
-  display: flex;
+  /*display: flex;*/
 }
 
 .button-box {
@@ -222,8 +197,9 @@ export default {
 }
 
 .el-row {
-  width: 900px;
-  height: 30px;
+  /*width: 900px;*/
+  /*height: 30px;*/
+  margin-bottom: 15px;
 }
 
 .chart /deep/ .el-input__inner {
@@ -238,5 +214,15 @@ export default {
 
 .plus, .del {
   padding: 10px 10px;
+}
+
+.sql /deep/ .el-input__inner {
+  border-radius: 10px;
+  width:640px;
+  border-top-width: 0;
+  border-left-width: 0;
+  border-right-width: 0;
+  border-bottom-width: 1px;
+  /*outline: medium;*/
 }
 </style>
