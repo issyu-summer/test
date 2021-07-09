@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { columns, resources } from '../utils/request'
+import { columns, resources } from '../api/config'
 
 export default {
   components: {
@@ -204,7 +204,7 @@ export default {
 
 .chart /deep/ .el-input__inner {
   border-radius: 15px;
-  width: 100px;
+  width: 130px;
   border-top-width: 0;
   border-left-width: 0;
   border-right-width: 0;

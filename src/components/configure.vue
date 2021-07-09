@@ -88,8 +88,9 @@ import Basic from './basic.vue'
 import LeadBoard from './leadboard.vue'
 import Chart from './chart.vue'
 import Carousel from './carousel.vue'
-import { config } from '../utils/request'
 import Nav from './nav'
+import { basic } from '../api/config'
+
 export default {
   components: {
     Nav,
@@ -120,18 +121,12 @@ export default {
       this.projectId = id
     },
     submit() {
-      const basic = this.$refs.basic.basicConfig
+      const basicConfig = this.$refs.basic.basicConfig
       const id = this.$refs.basic.projectId
-      const resp = config('/basic/' + id, basic)
-      console.log(resp)
-      const leadBoardList = this.$refs.leaderboard.leadBoardList
-      for (let i = 0; i < leadBoardList.length; i++) {
-        delete leadBoardList[i].sqlsen
-      }
-      const chartInfos = this.$refs.chart.chartInfo
-      for (let i = 0; i < chartInfos.length; i++) {
-        delete chartInfos[i].sqlsen
-      }
+      basic(id, basicConfig).then(response => {
+        console.log(response.data)
+      })
+      // const leadBoardList = this.$refs.leaderboard.leadBoardList
     },
     logoBeforeUpload(file) {
       const isRightSize = file.size / 1024 / 1024 < 2
@@ -182,7 +177,6 @@ export default {
           this.$set(this.judge, i, false)
         }
       }
-      console.log(this.judge)
     }
   }
 }

@@ -210,7 +210,7 @@ export default {
 <style scoped>
 .in /deep/ .el-input__inner {
   border-radius: 10px;
-  width: 100px;
+  width: 130px;
   border-top-width: 0;
   border-left-width: 0;
   border-right-width: 0;

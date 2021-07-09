@@ -146,7 +146,7 @@
 </template>
 
 <script>
-import { get } from '../utils/request'
+import { projects } from '../api/config'
 
 export default {
   components: {},
@@ -215,7 +215,7 @@ export default {
     }
   },
   created() {
-    get('http://localhost:4010/Project/all').then(response => {
+    projects().then(response => {
       this.projectIdOptions = response.data
     })
     console.log(this.projectId)
