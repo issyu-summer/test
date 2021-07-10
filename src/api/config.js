@@ -32,19 +32,17 @@ export function category(projectId, data) {
   })
 }
 
-export function panelGroup(projectId, data) {
+export function panelGroup(projectId) {
   return request({
     url: `/panelGroup/${projectId}`,
-    method: 'post',
-    data
+    method: 'post'
   })
 }
 
-export function articleList(projectId, data) {
+export function articleList(projectId) {
   return request({
     url: `/articleList/${projectId}`,
-    method: 'post',
-    data
+    method: 'post'
   })
 }
 

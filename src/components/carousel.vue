@@ -36,7 +36,6 @@
               :style="{ width: '100%' }"
               clearable
               placeholder="数据表"
-              @change="changeResourceId($event, index)"
             >
               <el-option
                 v-for="(resource, resourceIndex) in resourceIdOptions"
@@ -66,10 +65,11 @@
               list-type="picture"
               :action="carouselAction"
               :auto-upload="true"
-              :on-success="carouselSuccess"
+              :on-success="(resp,file,fileList)=>{carouselSuccess(resp,file,fileList,item)}"
               :on-remove="carouselRemove"
             >
               <el-button
+                v-if="!item.url"
                 size="small"
                 type="primary"
                 icon="el-icon-upload"
@@ -100,7 +100,7 @@ export default {
   props: ['projectId'],
   data() {
     return {
-      carouselAction: '',
+      carouselAction: 'http://101.37.20.199:8080/image',
       carouselConfig: [
         {
           resourceId: 123456,
@@ -134,8 +134,8 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    carouselSuccess(response, file, fileList) {
-
+    carouselSuccess(response, file, fileList, item) {
+      item.url = 'http://101.37.20.199:22000/' + response.fullPath
     },
     carouselRemove() {
 
@@ -145,21 +145,13 @@ export default {
         this.resourceIdOptions = response.data
       })
     },
-    field101BeforeUpload(file) {
-      const isRightSize = file.size / 1024 / 1024 < 2
-      if (!isRightSize) {
-        this.$message.error('文件大小超过 2MB')
-      }
-      return isRightSize
-    },
     onAddFormItem() {
       this.carouselConfig.push({
         resourceId: 123456,
         table: '',
         keyword: '',
         url: '',
-        fields: [],
-        conditions: ''
+        sql: ''
       })
     },
     onDeleteFormItem(index) {

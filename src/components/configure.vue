@@ -90,6 +90,11 @@ import Chart from './chart.vue'
 import Carousel from './carousel.vue'
 import Nav from './nav'
 import { basic } from '../api/config'
+import { carousel } from '../api/config'
+import { leadBoard } from '../api/config'
+import { panelGroup } from '../api/config'
+import { category } from '../api/config'
+import { articleList } from '../api/config'
 
 export default {
   components: {
@@ -126,46 +131,30 @@ export default {
       basic(id, basicConfig).then(response => {
         console.log(response.data)
       })
-      // const leadBoardList = this.$refs.leaderboard.leadBoardList
-    },
-    logoBeforeUpload(file) {
-      const isRightSize = file.size / 1024 / 1024 < 2
-      if (!isRightSize) {
-        this.$message.error('文件大小超过 2MB')
-      }
-      const isAccept = new RegExp('image/*').test(file.type)
-      if (!isAccept) {
-        this.$message.error('应该选择image/*类型的文件')
-      }
-      return isRightSize && isAccept
-    },
-    submitUploadLogo() {
-      this.$refs['logo'].submit()
-    },
-    bannerBeforeUpload(file) {
-      const isRightSize = file.size / 1024 / 1024 < 2
-      if (!isRightSize) {
-        this.$message.error('文件大小超过 2MB')
-      }
-      const isAccept = new RegExp('image/*').test(file.type)
-      if (!isAccept) {
-        this.$message.error('应该选择image/*类型的文件')
-      }
-      return isRightSize && isAccept
-    },
-    submitUploadBanner() {
-      this.$refs['banner'].submit()
+      const carouselConfig = this.$refs.carousel.carouselConfig
+      carousel(id, carouselConfig).then(response => {
+        console.log(response.data)
+      })
+      const leadBoardConfig = this.$refs.leaderboard.leadBoardList
+      leadBoard(id, leadBoardConfig).then(response => {
+        console.log(response)
+      })
+      const categoryConfig = this.$refs.chart.chartInfo
+      category(id, categoryConfig).then(response => {
+        console.log(response.data)
+      })
+      panelGroup(id).then(response => {
+        console.log(response.data)
+      })
+      articleList(id).then(response => {
+        console.log(response.data)
+      })
     },
     handleOpen(key, keyPath) {
       console.log(key, keyPath)
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath)
-    },
-    toggleCollapse() {
-      console.log(123456789)
-
-      this.isCollapse = !this.isCollapse
     },
     jumpTo(n) {
       for (let i = 0; i < 6; i++) {
