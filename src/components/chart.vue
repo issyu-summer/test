@@ -1,5 +1,5 @@
 <template>
-  <div class="form-wrapper">
+  <div class="form-wrapper setting-box">
     <div v-for="(item, index) in chartInfo" :key="index" class="form-list">
       <div class="chart">
         <el-row>
@@ -20,64 +20,68 @@
               </template>
             </div>
           </el-col>
-          <el-col :span="2">
-            <label>数据表:</label>
-          </el-col>
-          <el-col :span="3">
-            <el-select
-              :key="index"
-              v-model="item.resourceId"
-              :style="{width: '100%'}"
-              clearable
-              placeholder="数据表"
-              @change="changeResourceId($event, index)"
-            >
-              <el-option
-                v-for="(resource, resourceIndex) in resourceIdOptions"
-                :key="resourceIndex"
-                :disabled="item.disabled"
-                :label="resource.name"
-                :value="resource.id"
-              />
-            </el-select>
-          </el-col>
-          <el-col :span="2">
-            <label>横轴:</label>
-          </el-col>
-          <el-col :span="3">
-            <el-select v-model="item.xAxis" :style="{width: '100%'}" clearable placeholder="横轴">
-              <el-option
-                v-for="(xAxis, xAxisIndex) in xAxisOptions[index]"
-                :key="xAxisIndex"
-                :disabled="item.disabled"
-                :label="xAxis.COLUMN_NAME"
-                :value="xAxis.COLUMN_NAME"
-              />
-            </el-select>
-          </el-col>
-          <el-col :span="2">
-            <label>纵轴:</label>
-          </el-col>
-          <el-col :span="3">
-            <el-select v-model="item.yAxis" :style="{width: '100%'}" clearable placeholder="纵轴">
-              <el-option
-                v-for="(yAxis, yAxisIndex) in yAxisOptions[index]"
-                :key="yAxisIndex"
-                :disabled="item.disabled"
-                :label="yAxis.COLUMN_NAME"
-                :value="yAxis.COLUMN_NAME"
-              />
-            </el-select>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="4" :offset="6">
-            <label>SQL数据源:</label>
-          </el-col>
-          <el-col :span="14">
-            <div class="sql">
-              <el-input v-model="item.sql" />
-            </div>
+          <el-col :span="20">
+            <el-row class="d-flex align-items-center">
+              <el-col :span="3">
+                <label>数据表:</label>
+              </el-col>
+              <el-col :span="4">
+                <el-select
+                  :key="index"
+                  v-model="item.resourceId"
+                  :style="{width: '100%'}"
+                  clearable
+                  placeholder="数据表"
+                  @change="changeResourceId($event, index)"
+                >
+                  <el-option
+                    v-for="(resource, resourceIndex) in resourceIdOptions"
+                    :key="resourceIndex"
+                    :disabled="item.disabled"
+                    :label="resource.name"
+                    :value="resource.id"
+                  />
+                </el-select>
+              </el-col>
+              <el-col :span="3">
+                <label>横轴:</label>
+              </el-col>
+              <el-col :span="4">
+                <el-select v-model="item.xAxis" :style="{width: '100%'}" clearable placeholder="横轴">
+                  <el-option
+                    v-for="(xAxis, xAxisIndex) in xAxisOptions[index]"
+                    :key="xAxisIndex"
+                    :disabled="item.disabled"
+                    :label="xAxis.COLUMN_NAME"
+                    :value="xAxis.COLUMN_NAME"
+                  />
+                </el-select>
+              </el-col>
+              <el-col :span="3">
+                <label>纵轴:</label>
+              </el-col>
+              <el-col :span="4">
+                <el-select v-model="item.yAxis" :style="{width: '100%'}" clearable placeholder="纵轴">
+                  <el-option
+                    v-for="(yAxis, yAxisIndex) in yAxisOptions[index]"
+                    :key="yAxisIndex"
+                    :disabled="item.disabled"
+                    :label="yAxis.COLUMN_NAME"
+                    :value="yAxis.COLUMN_NAME"
+                  />
+                </el-select>
+              </el-col>
+            </el-row>
+            <el-row class="d-flex align-items-center">
+              <el-col :span="4">
+                <label>SQL数据源:</label>
+              </el-col>
+              <el-col :span="14">
+                <div class="sql">
+                  <el-input v-model="item.sql" />
+                </div>
+              </el-col>
+            </el-row>
           </el-col>
         </el-row>
       </div>
@@ -175,21 +179,16 @@ export default {
 <style scoped>
 .form-wrapper {
   /* width: 100%; */
-  width: 900px;
+  /* width: 900px; */
 }
 
 .form-list {
   width: 100%;
   margin-bottom: 30px;
   box-sizing: border-box;
+  background: #fff;
+  padding: 10px;
   /*display: flex;*/
-}
-
-.button-box {
-  width: 140px;
-  text-align: right;
-  padding-top: 10px;
-  flex-shrink: 0;
 }
 
 .form-box {
@@ -218,7 +217,7 @@ export default {
 
 .sql /deep/ .el-input__inner {
   border-radius: 10px;
-  width:640px;
+  width: 100%;
   border-top-width: 0;
   border-left-width: 0;
   border-right-width: 0;

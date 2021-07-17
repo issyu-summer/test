@@ -1,5 +1,5 @@
 <template>
-  <div class="form-wrapper">
+  <div class="form-wrapper setting-box">
     <div v-for="(item, index) in formList" :key="index" class="form-list">
       <div class="button-box">
         <template v-if="index === formList.length -1">

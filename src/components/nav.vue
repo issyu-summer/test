@@ -1,9 +1,9 @@
 <template>
-  <div class="form-wrapper">
+  <div class="form-wrapper setting-box">
     <div v-for="(item,index) in navConfig" :key="index" class="form-list">
       <div class="in">
-        <el-row>
-          <el-col :span="1">
+        <el-row class="item1-box">
+          <el-col :span="4">
             <div class="button-box">
               <template v-if="index === navConfig.length - 1">
                 <el-button
@@ -27,29 +27,33 @@
               </template>
             </div>
           </el-col>
-          <el-col :span="4" :offset="2">
-            <label>导航栏名称:</label>
-          </el-col>
-          <el-col :span="6">
-            <el-input v-model="item.name" />
-          </el-col>
-          <el-col :span="6">
-            <label>父导航栏:</label>
-          </el-col>
-          <el-col :span="3">
-            <el-select v-model="item.parent">
-              <el-option
-                v-for="(nav,navIndex) in navConfig"
-                :key="navIndex"
-                :label="nav.name"
-                :value="nav.name"
-              />
-            </el-select>
+          <el-col :span="20">
+            <el-row class="d-flex align-items-center">
+              <el-col :span="3">
+                <label>导航栏名称:</label>
+              </el-col>
+              <el-col :span="7">
+                <el-input v-model="item.name" />
+              </el-col>
+              <el-col :span="3">
+                <label>父导航栏:</label>
+              </el-col>
+              <el-col :span="7">
+                <el-select v-model="item.parent">
+                  <el-option
+                    v-for="(nav,navIndex) in navConfig"
+                    :key="navIndex"
+                    :label="nav.name"
+                    :value="nav.name"
+                  />
+                </el-select>
+              </el-col>
+            </el-row>
           </el-col>
         </el-row>
-        <div v-for="(item2, index2) in item.widgets" :key="index + index2 + '_item2'">
-          <el-row>
-            <el-col :span="1" :offset="2">
+        <div class="item2-box" v-for="(item2, index2) in item.widgets" :key="index + index2 + '_item2'">
+          <el-row class="d-flex">
+            <el-col :span="4">
               <div class="button-box">
                 <template v-if="index === navConfig.length - 1">
                   <el-button
@@ -73,50 +77,61 @@
                 </template>
               </div>
             </el-col>
-            <el-col :span="3" :offset="2">
-              <label>组件类型:</label>
-            </el-col>
-            <el-col :span="3">
-              <el-select v-model="item2.type">
-                <el-option
-                  v-for="(type,typeIndex) in types"
-                  :key="typeIndex"
-                  :disabled="false"
-                  :label="type.name"
-                  :value="type.value"
-                />
-              </el-select>
-            </el-col>
-            <el-col :span="3">
-              <label>组件名称:</label>
-            </el-col>
-            <el-col :span="3">
-              <el-input v-model="item2.name" />
-            </el-col>
-            <el-col :span="3">
-              <label>图表类型:</label>
-            </el-col>
-            <el-col :span="3">
-              <el-select v-model="item2.config.chartType">
-                <el-option
-                  v-for="(chartType,chartTypeIndex) in chartTypes"
-                  :key="chartTypeIndex"
-                  :disabled="false"
-                  :label="chartType.name"
-                  :value="chartType.value"
-                />
-              </el-select>
-
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="4" :offset="6">
-              <label>SQL数据源:</label>
-            </el-col>
-            <el-col :span="14">
-              <div class="sql">
-                <el-input v-model="item2.dataSource" />
-              </div>
+            <el-col :span="20">
+              <el-row class="d-flex align-items-center">
+                <el-col :span="3">
+                  <label>组件类型:</label>
+                </el-col>
+                <el-col :span="4">
+                  <el-select v-model="item2.type">
+                    <el-option
+                      v-for="(type,typeIndex) in types"
+                      :key="typeIndex"
+                      :disabled="false"
+                      :label="type.name"
+                      :value="type.value"
+                    />
+                  </el-select>
+                </el-col>
+                <el-col :span="3">
+                  <label>组件名称:</label>
+                </el-col>
+                <el-col :span="4">
+                  <el-input v-model="item2.name" />
+                </el-col>
+                <el-col :span="3">
+                  <label>图表类型:</label>
+                </el-col>
+                <el-col :span="4">
+                  <el-select v-model="item2.config.chartType">
+                    <el-option
+                      v-for="(chartType,chartTypeIndex) in chartTypes"
+                      :key="chartTypeIndex"
+                      :disabled="false"
+                      :label="chartType.name"
+                      :value="chartType.value"
+                    />
+                  </el-select>
+                </el-col>
+              </el-row>
+              <el-row class="d-flex align-items-center">
+                <el-col :span="3">
+                  <label>描述:</label>
+                </el-col>
+                <el-col :span="8">
+                  <el-input class="input-100" v-model="item2.example" />
+                </el-col>
+              </el-row>
+              <el-row class="d-flex align-items-center">
+                <el-col :span="3">
+                  <label>SQL数据源:</label>
+                </el-col>
+                <el-col :span="8">
+                  <div class="sql input-100">
+                    <el-input v-model="item2.dataSource" />
+                  </div>
+                </el-col>
+              </el-row>
             </el-col>
           </el-row>
         </div>
@@ -163,6 +178,7 @@ export default {
         'widgets': [{
           'type': '',
           'name': '',
+          'example': '',
           'dataSource': '',
           'config': {
             'chartType': ''
@@ -220,7 +236,7 @@ export default {
 
 .sql /deep/ .el-input__inner {
   border-radius: 10px;
-  width:640px;
+  width: 100%;
   border-top-width: 0;
   border-left-width: 0;
   border-right-width: 0;
@@ -236,7 +252,8 @@ export default {
 
 .form-wrapper {
   /* width: 100%; */
-  width: 900px;
+  /* width: 900px; */
+  /* background-color: #fff; */
 }
 
 .form-list {
@@ -247,17 +264,22 @@ export default {
   flex-direction: column
 }
 
-.button-box {
-  width: 120px;
-  padding-top: 5px;
-  flex-shrink: 0;
-}
-
 .plus, .del {
   padding: 10px 10px;
 }
 
 .form-box {
   padding: 10px;
+}
+
+.item1-box {
+  padding: 10px 0 0 0;
+  background-color: rgb(193, 206, 221);
+}
+.item2-box {
+  border: 1px solid #ccc;
+  background-color: #fff;
+  margin-top: 20px;
+  padding: 10px 0;
 }
 </style>

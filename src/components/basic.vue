@@ -1,28 +1,5 @@
 <template>
-  <div class="in">
-    <el-row>
-      <el-col :span="8">
-        <label style="font-size: 15px">项目:</label>
-      </el-col>
-      <el-col :span="7">
-        <el-select
-          v-model="projectId"
-          :style="{ width: '100%'}"
-          clearable
-          placeholder="请选择项目"
-          @change="changeProject"
-        >
-          <el-option
-            v-for="(item, index) in projectIdOptions"
-            :key="index"
-            :disabled="item.disabled"
-            :label="item.name"
-            :style="{ width: '100%'}"
-            :value="item.id"
-          />
-        </el-select>
-      </el-col>
-    </el-row>
+  <div class="setting-box">
     <el-row>
       <el-col :span="8">
         <label>项目名称:</label>
@@ -31,7 +8,7 @@
         <el-input
           v-model="basicConfig.titleCn"
           :maxlength="255"
-          :style="{ width: '100%' }"
+          :style="{ width: '100%'}"
           clearable
           placeholder="请输入项目名称"
           prefix-icon="el-icon-mobile"
@@ -115,7 +92,9 @@
           </el-button>
         </el-upload>
       </el-col>
+
     </el-row>
+
     <el-row>
       <el-col :span="8">
         <label>banner:</label>
@@ -126,11 +105,12 @@
           :action="action"
           :auto-upload="true"
           :on-success="bannerSuccess"
+          :on-remove="bannerRemove"
           accept="image/*"
           list-type="picture"
         >
           <el-button
-            v-if="!basicConfig.logoUrl"
+            v-if="!basicConfig.bannerUrl"
             icon="el-icon-upload"
             size="middle"
             type="text"
@@ -146,7 +126,8 @@
 </template>
 
 <script>
-import { projects } from '../api/config'
+// import Logo from './preview/Logo.vue'
+// import { projects } from '../api/config'
 
 export default {
   components: {},
@@ -215,9 +196,9 @@ export default {
     }
   },
   created() {
-    projects().then(response => {
-      this.projectIdOptions = response.data
-    })
+    // projects().then(response => {
+    //   this.projectIdOptions = response.data
+    // })
     console.log(this.projectId)
   },
   methods: {
@@ -235,6 +216,9 @@ export default {
     },
     bannerSuccess: function(response, file, fileList) {
       this.basicConfig.bannerUrl = 'http://101.37.20.199:22000/' + response.fullPath
+    },
+    bannerRemove() {
+      this.basicConfig.bannerUrl = ''
     }
   }
 }
@@ -251,6 +235,8 @@ export default {
   border-left-width: 0;
   border-right-width: 0;
   border-bottom-width: 1px;
+  vertical-align: middle;
+
   /*outline: medium;*/
 }
 

@@ -1,0 +1,21 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.button-box {
+  text-align: right;
+  height: 50px;
+}
+
+.input-100 input {
+  width: 100%!important;
+}

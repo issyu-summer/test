@@ -1,76 +1,132 @@
 <template>
-  <div>
-    <el-header>配置项目</el-header>
+  <div id='in'>
     <el-container>
-      <el-aside width="auto">
-        <div class="logo" />
-        <el-menu
-          :collapse="isCollapse"
-          class="el-menu-vertical-demo"
-          collapse-transition="true"
-          @close="handleClose"
-          @open="handleOpen"
-        >
+      <div class="left-wrapper">
+        <div class="d-flex align-items-center">
+          <label style="font-size: 15px; width: 60px">项目:</label>
+          <el-select
+            v-model="projectId"
+            :style="{ width: '100%'}"
+            clearable
+            placeholder="请选择项目"
+            @change="changeProject"
+          >
+            <el-option
+              v-for="(item, index) in projectIdOptions"
+              :key="index"
+              :disabled="item.disabled"
+              :label="item.name"
+              :style="{ width: '100%'}"
+              :value="item.id"
+            />
+          </el-select>
+        </div>
+        <el-aside width="auto">
+          <el-menu
+            :collapse="isCollapse"
+            class="el-menu-vertical-demo"
+            :collapse-transition="true"
+            @close="handleClose"
+            @open="handleOpen"
+          >
           <!-- <el-submenu index="1">
-                  <template slot="title">
-                    <i class="el-icon-location"></i>
-                    <span slot="title">添加项目</span>
-                  </template>
-                  <el-menu-item-group> -->
-          <el-menu-item @click="jumpTo(0)">
-            <i class="el-icon-location" />
-            <span slot="title">基础信息配置</span>
-          </el-menu-item>
-          <el-menu-item @click="jumpTo(1)">
-            <i class="el-icon-location" />
-            <span slot="title">轮播图配置</span>
-          </el-menu-item>
-          <el-menu-item @click="jumpTo(2)">
-            <i class="el-icon-location" />
-            <span slot="title">热词配置</span>
-          </el-menu-item>
-          <el-menu-item @click="jumpTo(3)">
-            <i class="el-icon-location" />
-            <span slot="title">排行榜配置</span>
-          </el-menu-item>
-          <el-menu-item @click="jumpTo(4)">
-            <i class="el-icon-location" />
-            <span slot="title">可视化图表</span>
-          </el-menu-item>
-          <el-menu-item @click="jumpTo(5)">
-            <i class="el-icon-location" />
-            <span slot="title">导航栏配置</span>
-          </el-menu-item>
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span>导航一</span>
+          </template>
+            <el-menu-item-group>
+            <template slot="title">分组一</template>
+            <el-menu-item v-for="(item,index) in bos" :key="index" @click="jumpTo(index)">
+              <el-button @click="test">+</el-button>
+              选项1
+            </el-menu-item>
+            <el-menu-item index="1-2">选项2</el-menu-item> -->
           <!-- </el-menu-item-group>
-                </el-submenu> -->
-          <!-- <el-submenu index="1">
-                  <template slot="title">
-                    <i class="el-icon-location"></i>
-                    <span slot="title">添加项目</span>
-                  </template>
-                </el-submenu> -->
-        </el-menu>
-      </el-aside>
+          </el-submenu> -->
+            <el-menu-item @click="jumpTo(9)">
+              <i class="el-icon-location" />
+              <span slot="title">项目基础信息</span>
+            </el-menu-item>
+            <el-menu-item @click="jumpTo(0)">
+              <i class="el-icon-location" />
+              <span slot="title">基础信息配置</span>
+            </el-menu-item>
+            <el-menu-item @click="jumpTo(1)">
+              <i class="el-icon-location" />
+              <span slot="title">轮播图配置</span>
+            </el-menu-item>
+            <el-menu-item @click="jumpTo(2)">
+              <i class="el-icon-location" />
+              <span slot="title">热词配置</span>
+            </el-menu-item>
+            <el-menu-item @click="jumpTo(3)">
+              <i class="el-icon-location" />
+              <span slot="title">排行榜配置</span>
+            </el-menu-item>
+            <el-menu-item @click="jumpTo(4)">
+              <i class="el-icon-location" />
+              <span slot="title">可视化图表</span>
+            </el-menu-item>
+            <el-menu-item @click="jumpTo(5)">
+              <i class="el-icon-location" />
+              <span slot="title">导航栏配置</span>
+            </el-menu-item>
+            <el-menu-item @click="jumpTo(6)">
+              <i class="el-icon-location" />
+              <span slot="title">search配置</span>
+            </el-menu-item>
+            <el-menu-item @click="jumpTo(7)">
+              <i class="el-icon-location" />
+              <span slot="title">searchField配置</span>
+            </el-menu-item>
+            <el-menu-item @click="jumpTo(8)">
+              <i class="el-icon-location" />
+              <span slot="title">searchResultStatistics配置</span>
+            </el-menu-item>
+            <!-- <el-menu-item @click="toSelect">
+              <i class="el-icon-location" />
+              <span slot="title">页面选择</span>
+            </el-menu-item> -->
+          </el-menu>
+        </el-aside>
+      </div>
       <div class="register_box">
-        <el-form
+        <el-header>配置项目</el-header>
+        <!-- <el-form
           ref="elForm"
           label-width="100px"
           size="medium"
-        >
-          <div v-show="judge[0]">
+        > -->
+          <!-- <div v-for="(item1,index1) in vos" :key="index1">
+            <Carousel ref="carousel" :project-id="projectId" v-show="judge[index1]"/>
+            <Basic ref="basic" @change-project="changeProject" />
+          </div> -->
+          <!-- <div v-if="judge[1]">
             <Basic ref="basic" @change-project="changeProject" />
           </div>
-          <div v-show="judge[3]">
+          <div v-if="judge[2]">
+            <Basic ref="basic" @change-project="changeProject" />
+          </div>
+          <div v-if="judge[3]">
+            <Basic ref="basic" @change-project="changeProject" />
+          </div>-->
+          <div v-if="judge[9]">
+            <Info ref="basic" @change-project="changeProject" />
+          </div>
+          <div v-if="judge[0]">
+            <Basic ref="basic" @change-project="changeProject" />
+          </div>
+           <div v-if="judge[3]">
             <LeadBoard ref="leaderboard" :project-id="projectId" />
           </div>
-          <div v-show="judge[1]">
+          <div v-if="judge[1]">
             <Carousel ref="carousel" :project-id="projectId" />
           </div>
-          <div v-show="judge[2]">这是热词</div>
-          <div v-show="judge[4]">
-            <chart ref="chart" :project-id="projectId" />
+          <div v-if="judge[2]">这是热词</div>
+          <div v-if="judge[4]">
+            <Chart ref="chart" :project-id="projectId" />
           </div>
-          <div v-show="judge[5]">
+          <div v-if="judge[5]">
             <Nav ref="nav" />
             <div>
               <el-button class="submit" round @click="submit">
@@ -78,32 +134,46 @@
               </el-button>
             </div>
           </div>
-        </el-form>
+          <div v-if="judge[6]">
+            <search ref="search" :project-id="projectId" />
+          </div>
+          <div v-if="judge[7]">
+            <search-field ref="search-field" :project-id="projectId" />
+          </div>
+          <div v-if="judge[8]">
+            <search-result-statistics ref="search-result-statistics" :project-id="projectId" />
+          </div>
+        <!-- </el-form> -->
       </div>
     </el-container>
   </div>
 </template>
 <script>
+import Info from './info.vue'
 import Basic from './basic.vue'
 import LeadBoard from './leadboard.vue'
 import Chart from './chart.vue'
 import Carousel from './carousel.vue'
-import Nav from './nav'
-import { basic } from '../api/config'
-import { carousel } from '../api/config'
-import { leadBoard } from '../api/config'
-import { panelGroup } from '../api/config'
-import { category } from '../api/config'
-import { articleList } from '../api/config'
+import Nav from './nav.vue'
+import Select from './select.vue'
+import Search from './search.vue'
+import SearchField from './searchField.vue'
+import SearchResultStatistics from './SearchResultStatistics.vue'
+import { basic, carousel, leadBoard, panelGroup, category, articleList } from '../api/config'
 
 export default {
   components: {
+    Info,
     Nav,
     Basic,
     LeadBoard,
     Chart,
     // eslint-disable-next-line vue/no-unused-components
-    Carousel
+    Carousel,
+    Select,
+    Search,
+    SearchField,
+    SearchResultStatistics
   },
   props: [],
   data() {
@@ -111,7 +181,7 @@ export default {
       basicConfig: '',
       isCollapse: false,
       elForm: '',
-      judge: [true, false, false, false, false, false],
+      judge: [false, false, false, false, false, false, false, false, false, true],
       projectId: ''
     }
   },
@@ -122,6 +192,20 @@ export default {
   mounted() {
   },
   methods: {
+    // test(){
+    //     this.bos.push({
+    //     name:"",
+    //   })
+    //   this.vos.push({
+    //     name:"",
+    //   })
+    //   this.i++
+    //   // this.$set(this.judge, this.i, true)
+
+    // },
+    toSelect() {
+      this.$router.push('/select');
+    },
     changeProject(id) {
       this.projectId = id
     },
@@ -157,7 +241,7 @@ export default {
       console.log(key, keyPath)
     },
     jumpTo(n) {
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 10; i++) {
         if (i === n) {
           this.judge[i] = true
           this.$set(this.judge, i, true)
@@ -171,15 +255,46 @@ export default {
 }
 </script>
 <style scoped>
+
+.left-wrapper {
+  margin: 30px 0 0 10px;
+}
+
+.el-aside {
+  margin-top: 20px;
+}
+
+#in{
+  background:url('../assets/images/1.jpg');
+  width:100%;
+  height: 100%;
+  /* position: fixed; */
+  background-size: 100% 100%;
+}
+.el-header {
+  text-align: center;
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+.el-containter {
+  display: flex;
+}
+.el-menu-item {
+  text-align: left;
+}
 .register_box {
-  width: 900px;
-  height: 250px;
-  background-color: #fff;
+  /* width: 900px; */
+  /* background-image: url('../assets/images/background.jpg');
+  background-size: 100% auto; */
+  flex: 1;
+  /* height: 250px; */
+  /* background-color: #fff; */
   border-radius: 5px;
-  position: absolute;
+  padding: 30px;
+  /* position: absolute;
   left: 50%;
   top: 40%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); */
 }
 
 </style>
