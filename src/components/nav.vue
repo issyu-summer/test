@@ -137,12 +137,15 @@
         </div>
       </div>
     </div>
+    <el-button @click="commit">提交</el-button>
   </div>
 </template>
 
 <script>
+import {addNav} from "../api/config";
 export default {
   name: 'Nav',
+  props: ["projectId"],
   components: {
   },
   data() {
@@ -184,7 +187,7 @@ export default {
             'chartType': ''
           }
         }]
-      }]
+      }],
     }
   },
   methods: {
@@ -195,7 +198,7 @@ export default {
         'widgets': [{
           'type': '',
           'name': '',
-          'dataSource': [],
+          'dataSource': '',
           'config': {
             'chartType': ''
           }
@@ -209,7 +212,7 @@ export default {
       this.navConfig[index].widgets.push({
         'type': '',
         'name': '',
-        'dataSource': [],
+        'dataSource': '',
         'config': {
           'chartType': ''
         }
@@ -217,8 +220,14 @@ export default {
     },
     onDeleteSubLevel(index, index2) {
       this.navConfig[index].widgets.splice(index2, 1)
-    }
-
+    },
+    commit(){
+      console.log(this.navConfig)
+      console.log(this.projectId)
+      addNav(this.projectId, this.navConfig).then((response) => {
+        console.log(response.data);
+      });
+    },
   }
 }
 </script>

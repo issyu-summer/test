@@ -127,7 +127,7 @@
 
 <script>
 // import Logo from './preview/Logo.vue'
-// import { projects } from '../api/config'
+import { projects } from '../api/config'
 
 export default {
   components: {},
@@ -196,9 +196,9 @@ export default {
     }
   },
   created() {
-    // projects().then(response => {
-    //   this.projectIdOptions = response.data
-    // })
+    projects().then(response => {
+      this.projectIdOptions = response.data
+    })
     console.log(this.projectId)
   },
   methods: {

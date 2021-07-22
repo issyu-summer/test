@@ -128,7 +128,7 @@
 <script>
 import { swiper, swiperSlide } from 'vue-awesome-swiper';
 import 'swiper/dist/css/swiper.css';
-// import { resources } from '../api/config'
+import { resources } from '../api/config'
 
 export default {
   props: ['projectId'],
@@ -197,9 +197,9 @@ export default {
 
     },
     getResources() {
-      // resources(this.projectId).then((response) => {
-      //   this.resourceIdOptions = response.data
-      // })
+      resources(this.projectId).then((response) => {
+        this.resourceIdOptions = response.data
+      })
     },
     onAddFormItem() {
       this.carouselConfig.push({
