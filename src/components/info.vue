@@ -1,20 +1,9 @@
 <template>
   <div>
-    <table>
-      <tr>
-        <th>项目名称</th>
-        <th>项目ID</th>
-        <th>作者</th>
-        <th>名称</th>
-      </tr>
-      <tr v-for="n in 4" :key="n">
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-    </table>
-  </div>
+   
+
+    <iframe src="//64.64.248.231:8080" id="mobsf" scrolling="yes" frameborder="0"></iframe>
+    </div>
 </template>
 
 <script>
@@ -23,7 +12,10 @@ export default {
     return {
 
     }
-  }
+  },
+  mounted(){
+        }
+
 }
 </script>
 
@@ -36,5 +28,9 @@ export default {
     border: 1px solid #fff;
     padding: 20px 25px;
     color: #fff;
+  }
+  iframe {
+    width: 850px;
+    height: 500px;
   }
 </style>

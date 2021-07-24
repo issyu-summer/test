@@ -1,5 +1,33 @@
 <template>
-  <div class="form-wrapper setting-box">
+  
+    <div class="setting-box">
+    <swiper :options="swiperOption" ref="mySwiper">
+      <div class="swiper-slide">
+        <img src="../assets/images/Bubblechart.png" alt="">
+      </div>
+      <div class="swiper-slide">
+        <img src="../assets/images/Histogram.png" alt="">
+      </div>
+      <div class="swiper-slide">
+        <img src="../assets/images/linechart.png" alt="">
+      </div>
+      <div class="swiper-slide">
+        <img src="../assets/images/piechart.png" alt="">
+      </div>
+      <div class="swiper-slide">
+        <img src="../assets/images/Radarchart.png" alt="">
+      </div>
+      <div class="swiper-slide">
+        <img src="../assets/images/relationchart.png" alt="">
+      </div>
+      <div class="swiper-slide">
+        <img src="../assets/images/Scatterplot.png" alt="">
+      </div>
+      <div class="swiper-pagination" slot="pagination"></div>
+      <div class="swiper-button-prev" slot="button-prev"></div>
+      <div class="swiper-button-next" slot="button-next"></div>
+    </swiper>
+
     <div v-for="(item,index) in navConfig" :key="index" class="form-list">
       <div class="in">
         <el-row class="item1-box">
@@ -113,6 +141,11 @@
                     />
                   </el-select>
                 </el-col>
+                <el-col :span="3">
+                  <el-checkbox 
+                  v-model="useSQL"
+                  >使用sql组件</el-checkbox>
+                </el-col>
               </el-row>
               <el-row class="d-flex align-items-center">
                 <el-col :span="3">
@@ -122,34 +155,65 @@
                   <el-input class="input-100" v-model="item2.example" />
                 </el-col>
               </el-row>
-              <el-row class="d-flex align-items-center">
-                <el-col :span="3">
+              <el-row  class="d-flex align-items-center">
+              <el-col v-if="useSQL==false">
+                <el-col :span="4" >
                   <label>SQL数据源:</label>
                 </el-col>
-                <el-col :span="8">
-                  <div class="sql input-100">
-                    <el-input v-model="item2.dataSource" />
+                <el-col :span="14">
+                  <div class="sql">
+                    <el-input v-model="item.sql" />
                   </div>
                 </el-col>
+              </el-col>
+              <el-col v-else-if="useSQL==true">
+                 <sql></sql>
+              </el-col>
               </el-row>
             </el-col>
           </el-row>
         </div>
       </div>
     </div>
-    <el-button @click="commit">提交</el-button>
+    
   </div>
 </template>
 
 <script>
 import {addNav} from "../api/config";
+import { swiper, swiperSlide } from 'vue-awesome-swiper';
+import 'swiper/dist/css/swiper.css';
+import sql from "./sqlcomponents.vue";
+
 export default {
   name: 'Nav',
   props: ["projectId"],
   components: {
+     swiper,
+    swiperSlide,
+    sql,
   },
   data() {
     return {
+      useSQL: false,
+      swiperOption: {
+        loop: true,
+        autoplay: {
+          delay: 3000,
+          stopOnLastSlide: false,
+          disableOnInteraction: false
+        },
+        slidesPerView: 3,
+        spaceBetween: 10,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        }
+      },
       chartTypes: [{
         'name': '折线图',
         'value': 0
@@ -233,62 +297,5 @@ export default {
 </script>
 
 <style scoped>
-.in /deep/ .el-input__inner {
-  border-radius: 10px;
-  width: 130px;
-  border-top-width: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  border-bottom-width: 1px;
-  /*outline: medium;*/
-}
-
-.sql /deep/ .el-input__inner {
-  border-radius: 10px;
-  width: 100%;
-  border-top-width: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  border-bottom-width: 1px;
-  /*outline: medium;*/
-}
-
-.el-row {
-  margin-bottom: 15px;
-  /*width: 900px;*/
-  /*height: 30px;*/
-}
-
-.form-wrapper {
-  /* width: 100%; */
-  /* width: 900px; */
-  /* background-color: #fff; */
-}
-
-.form-list {
-  width: 100%;
-  margin-bottom: 30px;
-  box-sizing: border-box;
-  /*display: flex;*/
-  flex-direction: column
-}
-
-.plus, .del {
-  padding: 10px 10px;
-}
-
-.form-box {
-  padding: 10px;
-}
-
-.item1-box {
-  padding: 10px 0 0 0;
-  background-color: rgb(193, 206, 221);
-}
-.item2-box {
-  border: 1px solid #ccc;
-  background-color: #fff;
-  margin-top: 20px;
-  padding: 10px 0;
-}
+@import "../assets/css/nav.css";
 </style>

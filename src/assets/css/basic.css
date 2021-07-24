@@ -1,0 +1,45 @@
+.in /deep/ .el-input__inner {
+    border-radius: 15px;
+    width: 220px;
+    border-top-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 1px;
+    vertical-align: middle;
+  
+    /*outline: medium;*/
+  }
+  
+  .el-row {
+    margin-bottom: 20px;
+    margin-left: 100px;
+    vertical-align: middle;
+  }
+  .el-col {
+    display: block;
+  }
+  label {
+    display: inline-block;
+    width: 120px;
+    text-align: right;
+  }
+  
+  .setting-box /deep/ .el-input__inner {
+    border-radius: 15px;
+    width: 300px;
+    border-top-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 1px;
+    vertical-align: middle;
+  
+    /*outline: medium;*/
+  }
+  
+  .setting-box {
+    margin: auto;
+    background-color: #fff;
+    width: 750px;
+    height: 500px;
+    border-radius: 15px;
+  }

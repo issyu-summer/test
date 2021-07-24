@@ -1,7 +1,7 @@
 <template>
   <div class="select-wrapper">
-    <div class="select-box" @click="toConfig">自定义</div>
-    <div class="select-box">默认</div>
+    <div class="select-box" @click="toAdd">新增项目</div>
+    <div class="select-box" @click="toConfig">项目配置</div>
   </div>
 </template>
 
@@ -14,7 +14,10 @@ export default {
   },
   methods: {
     toConfig() {
-      this.$router.push('/');
+      this.$router.push('/configure');
+    },
+    toAdd() {
+      this.$router.push('/add')
     }
   }
 }

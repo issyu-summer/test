@@ -36,47 +36,31 @@
                   />
                 </el-select>
               </el-col>
-              <el-col :span="3">
-                <label>排序字段:</label>
-              </el-col>
-              <el-col :span="4">
-                <el-select v-model="item.orderColumn" :style="{width: '100%'}" clearable placeholder="字段名">
-                  <el-option
-                    v-for="(column, columnIndex) in columnOptions[index]"
-                    :key="columnIndex"
-                    :disabled="item.disabled"
-                    :label="column.COLUMN_NAME"
-                    :value="column.COLUMN_NAME"
-                  />
-                </el-select>
-              </el-col>
-              <el-col :span="3">
-                <label>升/降序:</label>
-              </el-col>
-              <el-col :span="4">
-                <el-radio-group v-model="item.orderType" size="medium">
-                  <el-radio
-                    v-for="(order, orderIndex) in orderOptions"
-                    :key="orderIndex"
-                    :disabled="item.disabled"
-                    :label="order.value"
-                  >{{ order.name }}
-                  </el-radio>
-                </el-radio-group>
-              </el-col>
+              
+              <el-col :span="4" :offset="2">
+                  <el-checkbox 
+                  v-model="useSQL"
+                  >使用sql组件</el-checkbox>
+                </el-col>
             </el-row>
-            <el-row class="d-flex align-items-center">
-              <el-col :span="4">
-                <label>SQL数据源:</label>
+            <el-row  class="d-flex align-items-center">
+              <el-col v-if="useSQL==false">
+                <el-col :span="4" >
+                  <label>SQL数据源:</label>
+                </el-col>
+                <el-col :span="14">
+                  <div class="sql">
+                    <el-input v-model="item.sql" />
+                  </div>
+                </el-col>
               </el-col>
-              <el-col :span="14">
-                <div class="sql">
-                  <el-input v-model="item.sql" />
-                </div>
+              <el-col v-else-if="useSQL==true">
+                 <sql></sql>
               </el-col>
-            </el-row>
+              </el-row>
           </el-col>
         </el-row>
+        
       </div>
     </div>
   </div>
@@ -84,21 +68,21 @@
 
 <script>
 import { resources, columns } from '../api/config'
-
+import sql from "./sqlcomponents.vue";
 export default {
 
   components: {
+    sql,
   },
   props: [
     'projectId'
   ],
   data() {
     return {
+      useSQL: false,
       leadBoardList: [
         {
           resourceId: '',
-          orderColumn: '',
-          orderType: '',
           sql: ''
         }
       ],
@@ -153,8 +137,7 @@ export default {
   },
   methods: {
     changeResourceId(value, index) {
-      // console.log(value, index)
-      this.leadBoardList[index].orderColumn = ''
+      
       if (value) {
         this.getColumns(index)
       } else {
@@ -182,7 +165,8 @@ export default {
     },
     onDeleteFormItem(index) {
       this.leadBoardList.splice(index, 1)
-    }
+    },
+    
   }
 }
 
@@ -190,55 +174,7 @@ export default {
 
 <style scoped>
 
-.in /deep/ .el-input__inner {
-  border-radius: 15px;
-  width: 130px;
-  border-top-width: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  border-bottom-width: 1px;
-  /*outline: medium;*/
-}
+@import "../assets/css/align-center.css";
+@import "../assets/css/leadboard.css";
 
-.el-row {
-  margin-bottom: 15px;
-  /*width: 900px;*/
-  /*height: 30px;*/
-}
-
-.form-wrapper {
-  /* width: 100%; */
-  /* width: 900px; */
-}
-
-.form-list {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 30px;
-  box-sizing: border-box;
-  background: #fff;
-  /*display: flex;*/
-}
-
-.button-box {
-  /* width: 100px;
-  padding-top: 5px;
-  flex-shrink: 0; */
-}
-
-.plus, .del {
-  padding: 10px 10px;
-}
-.sql /deep/ .el-input__inner {
-  border-radius: 10px;
-  width: 100%;
-  border-top-width: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  border-bottom-width: 1px;
-  /*outline: medium;*/
-}
-.form-box {
-  padding: 10px;
-}
 </style>

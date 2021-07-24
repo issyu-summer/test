@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="in">
     <el-row>
       <el-col :span="8">
         <label>项目名称:</label>
@@ -122,18 +122,7 @@ export default {
 
 <style scoped>
 
-.el-row {
-  margin-bottom: 20px;
-  vertical-align: middle;
-}
-.el-col{
-  display: block;
-}
-label{
-  display: inline-block;
-  width: 120px;
-  text-align: right;
-  vertical-align: -webkit-baseline-middle;
-}
+@import "../assets/css/align-center.css";
+
 
 </style>

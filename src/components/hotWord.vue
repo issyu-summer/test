@@ -1,123 +1,165 @@
 <template>
-  <div class="hot-page d-flex">
-    <div>
-      <table>
-        <tr>
-          <th>list1</th>
-          <th>list2</th>
-          <th>list3</th>
-        </tr>
-        <tr v-for="n in 3" :key="n">
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-      </table>
-    </div>
-    <div class="right-box">
-      <el-row class="d-flex align-items-center">
-        <el-col :span="10">
-          <label>热词数量:</label>
+  <div class="hot-page">
+    <div v-for="(item, index) in hotConfig" :key="index" class="item-box">
+      <el-row :gutter="24">
+        <el-col :span="4">
+          <div class="button-box">
+            <template v-if="index === hotConfig.length - 1">
+              <el-button
+                circle
+                class="plus"
+                icon="el-icon-plus"
+                size="medium"
+                type="primary"
+                @click="onAddItem"
+              />
+            </template>
+            <template v-if="index">
+              <el-button
+                circle
+                class="del"
+                icon="el-icon-minus"
+                size="medium"
+                type="danger"
+                @click="onDeleteItem(index)"
+              />
+            </template>
+          </div>
         </el-col>
-        <el-col :span="14">
-          <!-- <el-select
-            v-model="form.hotNum"
-            :style="{ width: '100%' }"
-            clearable
-            placeholder="选择热词数量"
-            @change="changeResourceId($event, index)"
-          >
-            <el-option label="1" value="1" />
-            <el-option label="2" value="2" />
-          </el-select> -->
-          <el-input
-            v-model="form.num"
-            placeholder="请输入配置热词的数量"
-          ></el-input>
+        <el-col :span="20">
+          <el-row class="d-flex align-items-center">
+            <el-col :span="3">
+              <label>数据源：</label>
+            </el-col>
+            <el-col :span="4">
+              <el-select
+                v-model="item.origin"
+                :style="{ width: '100%' }"
+                clearable
+                placeholder="数据源"
+              >
+                <el-option
+                  v-for="(originItem, originIndex) in item.originList"
+                  :key="originIndex"
+                  :label="originItem.name"
+                  :value="originItem.id"
+                />
+              </el-select>
+            </el-col>
+            <el-col :span="3">
+              <label>数量：</label>
+            </el-col>
+            <el-col :span="4">
+              <el-input
+                @change="onNumChange(item)"
+                v-model="item.num"
+                placeholder="数量"
+                clearable
+                :style="{ width: '100%' }"
+              />
+            </el-col>
+            <el-col :span="3">
+              <label>名称：</label>
+            </el-col>
+            <el-col :span="4">
+              <el-input
+                v-model="item.name"
+                placeholder="名称"
+                clearable
+                :style="{ width: '100%' }"
+              />
+            </el-col>
+          </el-row>
+          <el-checkbox-group v-model="item.hotChecked" :max="+item.num">
+            <table>
+              <tr>
+                <td v-for="(wordItem, wordIndex) in item.hotList" :key="wordIndex">
+                  <el-checkbox :label="wordItem.label">{{ wordItem.name }}</el-checkbox>
+                </td>
+              </tr>
+            </table>
+          </el-checkbox-group>
         </el-col>
       </el-row>
-      <el-row class="d-flex align-items-center mt-4">
-        <el-col :span="10">
-          <label>数据源:</label>
-        </el-col>
-        <el-col :span="14">
-          <el-select
-            v-model="form.origin"
-            :style="{ width: '100%' }"
-            clearable
-            placeholder="选择数据源"
-          >
-            <el-option label="数据源1" value="1" />
-            <el-option label="数据源2" value="2" />
-          </el-select>
-        </el-col>
-      </el-row>
-      <div class="img-box">
-        <img src="../assets/images/word.png" alt="" />
-      </div>
     </div>
   </div>
 </template>
 
 <script>
+const configItem = {
+
+}
 export default {
-  props: ["projectId"],
-  name: "hotWord",
+  name: 'hotWord',
   data() {
     return {
-      form: {
-        num: "",
-        origin: "",
-      },
+      hotConfig: [
+        {
+          origin: '',
+          originList: [],
+          num: '',
+          name: '',
+          hotChecked: [],
+          hotList: [
+            { name: 'word 1', label: 1 },
+            { name: 'word 2', label: 2 },
+            { name: 'word 3', label: 3 },
+            { name: 'word 4', label: 4 },
+            { name: 'word 5', label: 5 },
+            { name: 'word 6', label: 6 },
+            { name: 'word 7', label: 7 },
+            { name: 'word 8', label: 8 },
+            { name: 'word 9', label: 9 },
+            { name: 'word 10', label: 10 },
+            { name: 'word 11', label: 11 },
+            { name: 'word 12', label: 12 },
+            { name: 'word 13', label: 13 },
+            { name: 'word 14', label: 14 },
+            { name: 'word 15', label: 15 }
+          ]
+        }
+      ]
     };
   },
-  watch: {
-    projectId(n) {
-      if (n) {
-        //重新加载数据源
-      }
-    },
-  },
-  created() {
-    //读取数据源
-  },
   methods: {
-    getResource() {
-      //获取数据源
+    onAddItem() {
+      this.hotConfig.push({
+        origin: '',
+        originList: [],
+        num: '',
+        name: '',
+        hotChecked: [],
+        hotList: [
+          { name: 'word 1', label: 1 },
+          { name: 'word 2', label: 2 },
+          { name: 'word 3', label: 3 },
+          { name: 'word 4', label: 4 },
+          { name: 'word 5', label: 5 },
+          { name: 'word 6', label: 6 },
+          { name: 'word 7', label: 7 },
+          { name: 'word 8', label: 8 },
+          { name: 'word 9', label: 9 },
+          { name: 'word 10', label: 10 },
+          { name: 'word 11', label: 11 },
+          { name: 'word 12', label: 12 },
+          { name: 'word 13', label: 13 },
+          { name: 'word 14', label: 14 },
+          { name: 'word 15', label: 15 }
+        ]
+      });
     },
-  },
+    onDeleteItem(index) {
+      this.hotConfig.splice(index, 1);
+    },
+    onNumChange(item) {
+      item.hotChecked = []
+    }
+  }
 };
 </script>
 
 <style scoped>
-.hot-page {
-  justify-content: center;
-}
-table {
-  text-align: center;
-}
-th,
-td {
-  border: 1px solid #fff;
-  padding: 20px 25px;
-  color: #fff;
-}
 
-.right-box {
-  margin-left: 100px;
-  color: #fff;
-}
+@import "../assets/css/hotword.css";
 
-.mt-4 {
-  margin-top: 20px;
-}
-
-.img-box {
-  width: 300px;
-  margin-top: 40px;
-}
-
-.img-box img {
-  width: 100%;
-}
 </style>

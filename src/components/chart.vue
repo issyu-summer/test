@@ -47,41 +47,42 @@
                 <label>横轴:</label>
               </el-col>
               <el-col :span="4">
-                <el-select v-model="item.xAxis" :style="{width: '100%'}" clearable placeholder="横轴">
-                  <el-option
-                    v-for="(xAxis, xAxisIndex) in xAxisOptions[index]"
-                    :key="xAxisIndex"
-                    :disabled="item.disabled"
-                    :label="xAxis.COLUMN_NAME"
-                    :value="xAxis.COLUMN_NAME"
-                  />
-                </el-select>
+                <el-input v-model="item.xAxis" :style="{width: '100%'}" >
+                  
+                </el-input>
               </el-col>
               <el-col :span="3">
                 <label>纵轴:</label>
               </el-col>
               <el-col :span="4">
-                <el-select v-model="item.yAxis" :style="{width: '100%'}" clearable placeholder="纵轴">
-                  <el-option
-                    v-for="(yAxis, yAxisIndex) in yAxisOptions[index]"
-                    :key="yAxisIndex"
-                    :disabled="item.disabled"
-                    :label="yAxis.COLUMN_NAME"
-                    :value="yAxis.COLUMN_NAME"
-                  />
-                </el-select>
+                <el-input v-model="item.yAxis" :style="{width: '100%'}" >
+        
+                  
+                </el-input>
               </el-col>
+              <el-col :span="3">
+                  <el-checkbox 
+                  v-model="useSQL"
+                  >使用sql组件</el-checkbox>
+                </el-col>
             </el-row>
-            <el-row class="d-flex align-items-center">
-              <el-col :span="4">
-                <label>SQL数据源:</label>
+            <el-row  class="d-flex align-items-center">
+              <el-col v-if="useSQL==false">
+                <el-col :span="4" >
+                  <label>SQL数据源:</label>
+                </el-col>
+                <el-col :span="14">
+                  <div class="sql">
+                    <el-input v-model="item.sql" />
+                  </div>
+                </el-col>
               </el-col>
-              <el-col :span="14">
-                <div class="sql">
-                  <el-input v-model="item.sql" />
-                </div>
+              <el-col v-else-if="useSQL==true">
+                 
+                   <sql></sql>
+                 
               </el-col>
-            </el-row>
+              </el-row>
           </el-col>
         </el-row>
       </div>
@@ -93,15 +94,17 @@
 
 <script>
 import { columns, resources } from '../api/config'
-
+import sql from "./sqlcomponents.vue";
 export default {
   components: {
+    sql,
   },
   props: [
     'projectId'
   ],
   data() {
     return {
+      useSQL: false,
       chartInfo: [
         {
           resourceId: '',
@@ -177,51 +180,6 @@ export default {
 </script>
 
 <style scoped>
-.form-wrapper {
-  /* width: 100%; */
-  /* width: 900px; */
-}
+@import "../assets/css/chart.css";
 
-.form-list {
-  width: 100%;
-  margin-bottom: 30px;
-  box-sizing: border-box;
-  background: #fff;
-  padding: 10px;
-  /*display: flex;*/
-}
-
-.form-box {
-  padding: 10px;
-}
-
-.el-row {
-  /*width: 900px;*/
-  /*height: 30px;*/
-  margin-bottom: 15px;
-}
-
-.chart /deep/ .el-input__inner {
-  border-radius: 15px;
-  width: 130px;
-  border-top-width: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  border-bottom-width: 1px;
-  /*outline: medium;*/
-}
-
-.plus, .del {
-  padding: 10px 10px;
-}
-
-.sql /deep/ .el-input__inner {
-  border-radius: 10px;
-  width: 100%;
-  border-top-width: 0;
-  border-left-width: 0;
-  border-right-width: 0;
-  border-bottom-width: 1px;
-  /*outline: medium;*/
-}
 </style>

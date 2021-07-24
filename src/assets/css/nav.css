@@ -1,0 +1,63 @@
+.in /deep/ .el-input__inner {
+    border-radius: 10px;
+    width: 130px;
+    border-top-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 1px;
+    /*outline: medium;*/
+  }
+  
+  .sql /deep/ .el-input__inner {
+    border-radius: 10px;
+    width: 100%;
+    border-top-width: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 1px;
+    /*outline: medium;*/
+  }
+  
+  .el-row {
+    margin-bottom: 15px;
+    /*width: 900px;*/
+    /*height: 30px;*/
+  }
+
+  .swiper-container {
+    width: 960px;
+    height: 180px;
+    margin-bottom: 40px;
+    border: 1px solid #ccc;
+  }
+  
+  .swiper-slide, .swiper-slide img {
+    width: 320px;
+    height: 180px;
+  }
+  .form-list {
+    width: 100%;
+    margin-bottom: 30px;
+    box-sizing: border-box;
+    /*display: flex;*/
+    flex-direction: column
+  }
+  
+  .plus, .del {
+    padding: 10px 10px;
+  }
+  
+  .form-box {
+    padding: 10px;
+  }
+  
+  .item1-box {
+    padding: 10px 0 0 0;
+    background-color: rgb(193, 206, 221);
+  }
+  .item2-box {
+    border: 1px solid #ccc;
+    background-color: #fff;
+    margin-top: 20px;
+    padding: 10px 0;
+  }

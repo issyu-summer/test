@@ -1,42 +1,40 @@
 <template>
-  <div>
-    <el-row>
-      <el-col :span="5">
-        <el-form-item style="width: 100px;margin-left: 60px">
+  <el-form>
+    <div>
+      <el-row style="margin-left: 25px">
+        
+        <el-col :span="3">
+          <label>SQL数据源:</label>
+        </el-col>
+        <el-col :span="3">
           <el-checkbox v-model="isused">启用SQL</el-checkbox>
-        </el-form-item>
-      </el-col>
-      <el-col :span="5">
-        <el-form-item style="width: 100px;margin-left: 60px">
+        </el-col>
+        <el-col :span="3">
           <el-checkbox
             v-model="useWHERE"
             :disabled="isused === false"
           >启用WHERE
           </el-checkbox>
-        </el-form-item>
-      </el-col>
-      <el-col :span="5">
-        <el-form-item style="width: 100px;margin-left: 60px">
+        </el-col>
+        <el-col :span="4">
           <el-checkbox
             v-model="useGROUPBY"
             :disabled="isused === false"
           >启用GROUP BY
           </el-checkbox>
-        </el-form-item>
-      </el-col>
-      <el-col :span="5">
-        <el-form-item style="width: 100px;margin-left: 60px">
+        </el-col>
+        <el-col :span="3">
           <el-checkbox
             v-model="useLIMIT"
             :disabled="isused === false"
           >启用LIMIT
           </el-checkbox>
-        </el-form-item>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="24" style="margin-left: 54px">
-        <el-form-item v-if="isused">
+        </el-col>
+        
+      </el-row>
+      <el-row v-if="isused" >
+        <el-col :span="24">
+          
           <el-col :span="2">SELECT</el-col>
           <el-col :span="3">
             <el-select
@@ -53,12 +51,17 @@
               />
             </el-select>
           </el-col>
-          <el-col :span="2">AS</el-col>
-          <el-col :span="3">
-            <el-input :disabled="isused === false" />
+          <el-col :span="1" offset="1">AS</el-col>
+          <el-col :span="2">
+            <el-input :disabled="isused === false"/>
           </el-col>
-          <el-col :span="2">FROM</el-col>
-          <el-col :span="3">
+          
+        </el-col>
+      </el-row>
+      <el-row v-if="isused">
+        <el-col   :span="5">
+          <el-col :span="8">FROM</el-col>
+          <el-col :span="16">
             <el-select
               v-model="sql.table"
               :disabled="isused === false"
@@ -74,13 +77,12 @@
               />
             </el-select>
           </el-col>
-        </el-form-item>
-      </el-col>
-    </el-row>
+        </el-col>
 
-    <el-row>
-      <el-col style="margin-left: 54px">
-        <el-form-item v-if="isused&&useWHERE">
+      </el-row>
+      <el-row>
+        <el-col v-if="isused&&useWHERE">
+          <!--        <el-form-item >-->
           <el-col :span="2">WHERE</el-col>
           <el-col :span="3">
             <el-select
@@ -118,14 +120,13 @@
               v-model="sql.value"
             />
           </el-col>
-        </el-form-item>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="10">
-        <el-form-item v-if="isused&&useGROUPBY">
-          <el-col :span="9" :offset="4">GROUP BY</el-col>
-          <el-col :span="8">
+          <!--        </el-form-item>-->
+        </el-col>
+      </el-row>
+      <el-row v-if="isused&&useGROUPBY">
+        <el-col :span="7">
+          <el-col :span="9">GROUP BY</el-col>
+          <el-col :span="10">
             <el-select
               v-model="sql.groupColumn"
               :style="{ width: '100%' }"
@@ -140,22 +141,18 @@
               />
             </el-select>
           </el-col>
-        </el-form-item>
-      </el-col>
-    </el-row>
-    <el-row>
-      <el-col :span="12" :offset="1">
-        <el-form-item v-if="isused&&useLIMIT">
-          <el-col :span="6">LIMIT</el-col>
-          <el-col :span="3">
-            <el-input />
+        </el-col>
+      </el-row>
+      <el-row v-if="isused&&useLIMIT">
+        <el-col  :span="5">
+          <el-col :span="7">LIMIT</el-col>
+          <el-col :span="10">
+            <el-input/>
           </el-col>
-        </el-form-item>
-      </el-col>
-    </el-row>
-
-  </div>
-
+        </el-col>
+      </el-row>
+    </div>
+  </el-form>
 </template>
 
 <script>
@@ -259,5 +256,9 @@ export default {
 }
 </script>
 <style scoped>
-
+.el-row {
+  width: 920px;
+  margin-left: 54px;
+  margin-bottom: 20px
+}
 </style>
