@@ -1,6 +1,14 @@
 <template>
-  <div id="in">
-    <el-row>
+  <div id="in" >
+    <div id="in2" style="
+    justify-content: center;
+    text-align: center;
+    font-size: larger;
+    margin-top: 60px;
+    margin-bottom: 40px;
+"><label data-v-56e6ce41="">新增项目</label></div>
+
+     <el-row>
       <el-col :span="8">
         <label>项目名称:</label>
       </el-col>
@@ -75,7 +83,8 @@
         <el-button type="primary"  @click="synchronizeData">同步数据</el-button>
       </el-col>
     </el-row>
-  </div>
+    </div>
+  
 </template>
 
 <script>
@@ -122,7 +131,22 @@ export default {
 
 <style scoped>
 
-@import "../assets/css/align-center.css";
+
+@import "../assets/css/configure.css";
+.el-row {
+  margin-bottom: 20px;
+  vertical-align: middle;
+  margin-left: 70px;
+}
+.el-col{
+  display: block;
+}
+label{
+  display: inline-block;
+  width: 120px;
+  text-align: right;
+  vertical-align: -webkit-baseline-middle;
+}
 
 
 </style>

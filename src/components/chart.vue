@@ -62,7 +62,7 @@
               </el-col>
               <el-col :span="3">
                   <el-checkbox 
-                  v-model="useSQL"
+                  v-model="item.useSQL"
                   >使用sql组件</el-checkbox>
                 </el-col>
             </el-row>
