@@ -36,7 +36,7 @@
         <el-col :span="24">
           
           <el-col :span="2">SELECT</el-col>
-          <el-col :span="3">
+          <!-- <el-col :span="3">
             <el-select
               v-model="sql.columns"
               :style="{ width: '100%' }"
@@ -51,7 +51,7 @@
               />
             </el-select>
           </el-col>
-          <el-col :span="1" offset="1">AS</el-col>
+          <el-col :span="1" offset="1">AS</el-col> -->
           <el-col :span="2">
             <el-input :disabled="isused === false"/>
           </el-col>
@@ -84,7 +84,7 @@
         <el-col v-if="isused&&useWHERE">
           <!--        <el-form-item >-->
           <el-col :span="2">WHERE</el-col>
-          <el-col :span="3">
+          <!-- <el-col :span="3">
             <el-select
               v-model="sql.column"
               :style="{ width: '100%' }"
@@ -114,7 +114,7 @@
                 :value="item.value"
               />
             </el-select>
-          </el-col>
+          </el-col> -->
           <el-col :span="3">
             <el-input
               v-model="sql.value"

@@ -33,20 +33,21 @@
             </el-col>
             <el-col :span="4">
               <el-select
-                v-model="item.origin"
+                v-model="item.resourceId"
                 :style="{ width: '100%' }"
                 clearable
                 placeholder="数据源"
+
               >
                 <el-option
-                  v-for="(originItem, originIndex) in item.originList"
+                  v-for="(originItem, originIndex) in resourceIdOptions"
                   :key="originIndex"
                   :label="originItem.name"
                   :value="originItem.id"
                 />
               </el-select>
             </el-col>
-            <el-col :span="3">
+            <!-- <el-col :span="3">
               <label>数量：</label>
             </el-col>
             <el-col :span="4">
@@ -57,7 +58,7 @@
                 clearable
                 :style="{ width: '100%' }"
               />
-            </el-col>
+            </el-col> -->
             <el-col :span="3">
               <label>名称：</label>
             </el-col>
@@ -70,22 +71,22 @@
               />
             </el-col>
           </el-row>
-          <el-checkbox-group v-model="item.hotChecked" :max="+item.num">
             <table>
               <tr>
                 <td v-for="(wordItem, wordIndex) in item.hotList" :key="wordIndex">
-                  <el-checkbox :label="wordItem.label">{{ wordItem.name }}</el-checkbox>
+                  <el-checkbox :label="wordItem.label" v-model="item.hotChecked[wordIndex]">{{ wordItem.name }}</el-checkbox>
                 </td>
               </tr>
             </table>
-          </el-checkbox-group>
         </el-col>
       </el-row>
     </div>
+    <el-button @click="commit">提交</el-button>
   </div>
 </template>
 
 <script>
+import {addTag} from "../api/config";
 const configItem = {
 
 }
@@ -95,6 +96,7 @@ export default {
     return {
       hotConfig: [
         {
+          resourceId:'',
           origin: '',
           originList: [],
           num: '',
@@ -118,12 +120,35 @@ export default {
             { name: 'word 15', label: 15 }
           ]
         }
-      ]
+      ],
+      resourceIdOptions: [
+        {
+          name: "选项一",
+          id: 1,
+        },
+        {
+          name: "选项二",
+          id: 2,
+        },
+      ],
     };
+  },
+  created(){
+    console.log("hotword")
+    addTag().then((response) => {
+        console.log(response.data)
+        var i = 0
+        for(i = 0; i < response.data.length; i++){
+          this.hotConfig[i].hotList = response.data[i].hotList
+          this.resourceIdOptions.push(response.data[i].resource)
+        }
+      });
+      console.length(this.hotConfig)
   },
   methods: {
     onAddItem() {
       this.hotConfig.push({
+        resourceId:'',
         origin: '',
         originList: [],
         num: '',
@@ -153,6 +178,27 @@ export default {
     },
     onNumChange(item) {
       item.hotChecked = []
+    },
+    commit(){
+      var i = 0
+      var result = []
+      for(i = 0; i< this.hotConfig.length; i++){
+        var config = {
+          'resourceId':this.hotConfig[i].resourceId,
+          'name':this.hotConfig[i].name,
+          'tags':[]
+        }
+        var j = 0
+        var tag = []
+        for(j = 0; j < this.hotConfig[i].hotList.length; j++){
+          if(this.hotConfig[i].hotChecked[j] == true) {
+            tag.push(this.hotConfig[i].hotList[j].name)
+          }
+        }
+        config.tags = tag
+        result.push(config)
+      }
+      console.log(result)
     }
   }
 };

@@ -108,6 +108,25 @@
             <el-col :span="20">
               <el-row class="d-flex align-items-center">
                 <el-col :span="3">
+                  <label>数据表:</label>
+                </el-col>
+                <el-col :span="4">
+                  <el-select
+                    v-model="item2.resourceId"
+                    :style="{ width: '100%' }"
+                    clearable
+                    placeholder="数据表"
+                  >
+                    <el-option
+                      v-for="(resource, resourceIndex) in resourceIdOptions"
+                      :key="resourceIndex"
+                      :disabled="item.disabled"
+                      :label="resource.name"
+                      :value="resource.id"
+                    />
+                  </el-select>
+                </el-col>
+                <el-col :span="3">
                   <label>组件类型:</label>
                 </el-col>
                 <el-col :span="4">
@@ -125,7 +144,7 @@
                   <label>组件名称:</label>
                 </el-col>
                 <el-col :span="4">
-                  <el-input v-model="item2.name" />
+                  <el-input v-model="item2.widgetName" />
                 </el-col>
                 <el-col :span="3">
                   <label>图表类型:</label>
@@ -141,23 +160,73 @@
                     />
                   </el-select>
                 </el-col>
-                <el-col :span="3">
+                <!-- <el-col :span="3">
                   <el-checkbox 
                   v-model="item2.useSQL"
                   default:false
                   >使用sql组件</el-checkbox>
-                </el-col>
+                </el-col> -->
               </el-row>
               <el-row class="d-flex align-items-center">
                 <el-col :span="3">
                   <label>描述:</label>
                 </el-col>
                 <el-col :span="8">
-                  <el-input class="input-100" v-model="item2.example" />
+                  <el-input class="input-100" v-model="item2.desc" />
                 </el-col>
               </el-row>
-              <el-row  class="d-flex align-items-center">
-              <el-col v-if="item2.useSQL==false">
+              <el-row class="d-flex align-items-center" v-if="item2.config.chartType == 1 || item2.config.chartType == 0">
+                <el-col :span="3">
+                  <label>X轴名称:</label>
+                </el-col>
+                <el-col :span="5">
+                  <el-input v-model="item2.config.xAxis"/>
+                </el-col>
+                <el-col :span="3">
+                  <label>Y轴名称:</label>
+                </el-col>
+                <el-col :span="5">
+                  <el-input v-model="item2.config.yAxis"/>
+                </el-col>
+              </el-row>
+              <el-row class="d-flex align-items-center" v-if="item2.config.chartType == 2">
+                <el-col :span="3">
+                  <label>字段名称:</label>
+                </el-col>
+                <el-col :span="5">
+                  <el-input v-model="item2.config.field"/>
+                </el-col>
+              </el-row>
+              <el-row class="d-flex align-items-center" v-if="item2.config.chartType == 3">
+                <el-col :span="3">
+                  <label>X轴名称:</label>
+                </el-col>
+                <el-col :span="5">
+                  <el-input v-model="item2.config.xAxis"/>
+                </el-col>
+                <el-col :span="3">
+                  <label>Y轴名称:</label>
+                </el-col>
+                <el-col :span="5">
+                  <el-input v-model="itme2.config.yAxis"/>
+                </el-col>
+                <el-col :span="3">
+                  <label>字段名称:</label>
+                </el-col>
+                <el-col :span="5">
+                  <el-input/>
+                </el-col>
+              </el-row>
+              <el-row class="d-flex align-items-center" v-if="item2.config.chartType == 4">
+                <el-col :span="3">
+                  <label>字段名称:</label>
+                </el-col>
+                <el-col :span="5">
+                  <el-input v-model="item2.config.field"/>
+                </el-col>
+              </el-row>
+              <el-row class="d-flex align-items-center">
+              <el-col>
                 <el-col :span="4" >
                   <label>SQL数据源:</label>
                 </el-col>
@@ -167,16 +236,13 @@
                   </div>
                 </el-col>
               </el-col>
-              <el-col v-else-if="item2.useSQL==true">
-                 <sql></sql>
-              </el-col>
               </el-row>
             </el-col>
           </el-row>
         </div>
       </div>
     </div>
-    
+    <!-- <el-button @click="commit()">提交</el-button> -->
   </div>
 </template>
 
@@ -185,6 +251,7 @@ import {addNav} from "../api/config";
 import { swiper, swiperSlide } from 'vue-awesome-swiper';
 import 'swiper/dist/css/swiper.css';
 import sql from "./sqlcomponents.vue";
+import { resources } from "../api/config";
 
 export default {
   name: 'Nav',
@@ -222,11 +289,14 @@ export default {
         'name': '柱状图',
         'value': 1
       }, {
-        'name': '关系图',
+        'name': '饼图',
         'value': 2
       }, {
         'name': '气泡图',
         'value': 3
+      }, {
+        'name': '雷达图',
+        'value': 4
       }],
       types: [{
         'name': '文本组件',
@@ -245,15 +315,37 @@ export default {
         'parent': '',
         'widgets': [{
           'type': '',
-          'name': '',
-          'example': '',
-          'dataSource': '',
+          'resourceId':'',
+          'widgetName': '',
+          'desc': '',
+          'flag':'',
+          'sql': '',
           'config': {
-            'chartType': ''
+            'chartType':'',
+            'xAxis':'',
+            'yAxis':'',
+            'field':''
           }
         }]
       }],
+      resourceIdOptions: [
+        {
+          label: "选项一",
+          value: 1,
+        },
+        {
+          label: "选项二",
+          value: 2,
+        },
+      ],
     }
+  },
+    watch: {
+    projectId(n) {
+      if (n) {
+        this.getResources();
+      }
+    },
   },
   methods: {
     onAddFormItem() {
@@ -291,6 +383,14 @@ export default {
       console.log(this.projectId)
       addNav(this.projectId, this.navConfig).then((response) => {
         console.log(response.data);
+      });
+    },
+    getResources() {
+      console.log("nav")
+      resources(this.projectId).then((response) => {
+        console.log(response.data)
+        this.resourceIdOptions = response.data;
+        console.log(this.resourceIdOptions)
       });
     },
   }

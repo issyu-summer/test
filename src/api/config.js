@@ -113,3 +113,10 @@ export function addNav(projectId,data) {
     data
   })
 }
+
+export function addTag() {
+  return request({
+    url: `/widgets/config/tags`,
+    method: 'post',
+  })
+}

@@ -56,7 +56,7 @@
             </el-menu-item>
             <el-menu-item @click="jumpTo(5)">
               <i class="el-icon-location" />
-              <span slot="title">导航栏配置</span>
+              <span slot="title">分析展示配置</span>
             </el-menu-item>
             <el-menu-item @click="jumpTo(6)">
               <i class="el-icon-location" />

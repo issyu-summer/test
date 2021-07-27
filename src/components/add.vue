@@ -80,6 +80,7 @@
     </el-row>
     <el-row >
       <el-col :span="7" :offset="8" >
+        <el-button type="primary" @click="save">保存</el-button>
         <el-button type="primary"  @click="synchronizeData">同步数据</el-button>
       </el-col>
     </el-row>
@@ -121,6 +122,10 @@ export default {
   mounted() {},
   methods: {
     synchronizeData(){
+      
+    },
+    save(){
+      console.log(this.addproject)
       addProject(this.addproject).then((response) => {
         console.log(response.data)
       });
