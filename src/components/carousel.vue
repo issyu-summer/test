@@ -70,12 +70,14 @@
                 </el-col>
                 <el-col :span="3">
                   <el-checkbox 
-                  v-model="item.useSQL"
+                  v-model="useSQlConfig[index]"
+                  
                   >使用sql组件</el-checkbox>
+                  
                 </el-col>
               </el-row>
               <el-row  class="sql">
-              <el-col v-if="useSQL==false">
+              <el-col v-if="useSQlConfig[index]==false">
                 <el-col :span="4" >
                   <label>SQL数据源:</label>
                 </el-col>
@@ -85,7 +87,7 @@
                   </div>
                 </el-col>
               </el-col>
-              <el-col v-else-if="useSQL==true">
+              <el-col v-else-if="useSQlConfig[index]==true">
                  <sql></sql>
              </el-col>
               </el-row>
@@ -104,10 +106,16 @@ export default {
   props: ["projectId"],
   data() {
     return {
-      useSQL: false,
+      
+      useSQlConfig:[
+        
+           false,
+       
+      ],
       carouselAction: "http://101.37.20.199:8080/image",
       carouselConfig: [
         {
+          
           resourceId: "",
           url: "",
           sql: "",
@@ -150,15 +158,19 @@ export default {
     },
     onAddFormItem() {
       this.carouselConfig.push({
-        resourceId: 123456,
+        resourceId: "",
         table: "",
         keyword: "",
         url: "",
         sql: "",
       });
+      this.useSQlConfig.push(
+        false
+      )
     },
     onDeleteFormItem(index) {
       this.carouselConfig.splice(index, 1);
+      this.useSQlConfig.splice(index,1);
     },
     },
 };

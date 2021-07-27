@@ -62,12 +62,12 @@
               </el-col>
               <el-col :span="3">
                   <el-checkbox 
-                  v-model="item.useSQL"
+                  v-model="useSQlConfig[index]"
                   >使用sql组件</el-checkbox>
                 </el-col>
             </el-row>
             <el-row  class="d-flex align-items-center">
-              <el-col v-if="useSQL==false">
+              <el-col v-if="useSQlConfig[index]==false">
                 <el-col :span="4" >
                   <label>SQL数据源:</label>
                 </el-col>
@@ -77,7 +77,7 @@
                   </div>
                 </el-col>
               </el-col>
-              <el-col v-else-if="useSQL==true">
+              <el-col v-else-if="useSQlConfig[index]==true">
                  
                    <sql></sql>
                  
@@ -104,7 +104,9 @@ export default {
   ],
   data() {
     return {
-      useSQL: false,
+      useSQlConfig:[
+           false,
+      ],
       chartInfo: [
         {
           resourceId: '',
@@ -165,10 +167,14 @@ export default {
         xAxis: '',
         yAxis: '',
         sql: ''
-      })
+      });
+      this.useSQlConfig.push(
+        false
+      )
     },
     onDeleteFormItem(index) {
-      this.chartInfo.splice(index, 1)
+      this.chartInfo.splice(index, 1);
+      this.useSQlConfig.splice(index,1);
     },
     getResources() {
       resources(this.projectId).then(response => {

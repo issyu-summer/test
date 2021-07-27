@@ -144,6 +144,7 @@
                 <el-col :span="3">
                   <el-checkbox 
                   v-model="item2.useSQL"
+                  default:false
                   >使用sql组件</el-checkbox>
                 </el-col>
               </el-row>
@@ -156,17 +157,17 @@
                 </el-col>
               </el-row>
               <el-row  class="d-flex align-items-center">
-              <el-col v-if="useSQL==false">
+              <el-col v-if="item2.useSQL==false">
                 <el-col :span="4" >
                   <label>SQL数据源:</label>
                 </el-col>
                 <el-col :span="14">
                   <div class="sql">
-                    <el-input v-model="item.sql" />
+                    <el-input v-model="item2.sql" />
                   </div>
                 </el-col>
               </el-col>
-              <el-col v-else-if="useSQL==true">
+              <el-col v-else-if="item2.useSQL==true">
                  <sql></sql>
               </el-col>
               </el-row>
